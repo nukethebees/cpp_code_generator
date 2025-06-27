@@ -3,3 +3,4 @@
 project ("cpp_code_generator")
 
 add_subdirectory ("cpp_code_generator")
+add_subdirectory ("tests")

@@ -7,4 +7,5 @@ target_sources(cpp_code_generator PUBLIC
   BASE_DIRS ../
   FILES
   "scanner.hpp"
+  "types.hpp"
 )
