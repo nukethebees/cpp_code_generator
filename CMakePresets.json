@@ -1,5 +1,5 @@
 ﻿{
-    "version": 3,
+    "version": 5,
     "configurePresets": [
         {
             "name": "windows-base",
@@ -7,70 +7,106 @@
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/out/build/${presetName}",
             "installDir": "${sourceDir}/out/install/${presetName}",
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "cl.exe",
-                "CMAKE_CXX_COMPILER": "cl.exe"
-            },
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",
                 "rhs": "Windows"
+            },
+            "cacheVariables": {
+                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/triplets",
+                "CMAKE_CXX_STANDARD": "23"
             }
         },
         {
-            "name": "x64-debug",
-            "displayName": "x64 Debug",
+            "name": "msvc-base",
+            "hidden": true,
             "inherits": "windows-base",
+            "environment": {
+                "MSVC_BASE_FLAGS": "/EHsc /W4 /Zc:preprocessor /permissive- /GS /Zc:wchar_t /Zc:inline /fp:precise /Gd /FC /nologo /Zc:checkGwOdr /Zc:enumTypes /Zc:externConstexpr /Zc:gotoScope /Zc:templateScope /Zc:ternary /Zc:throwingNew /GF /MP",
+                "MSVC_DEBUG_FLAGS": "$env{MSVC_BASE_FLAGS} /Od /RTC1",
+                "MSVC_RELEASE_FLAGS": "$env{MSVC_BASE_FLAGS} /O2 /GF /GL /Gy /Qpar",
+                "MSVC_RELEASE_PROFILE_FLAGS": "$env{MSVC_RELEASE_FLAGS} /Zi"
+            },
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+            }
+        },
+        {
+            "name": "x64-debug-msvc",
+            "displayName": "x64 Debug (MSVC)",
+            "inherits": "msvc-base",
             "architecture": {
                 "value": "x64",
                 "strategy": "external"
             },
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_CXX_FLAGS": "$env{MSVC_DEBUG_FLAGS}",
+                "VCPKG_TARGET_TRIPLET": "ntb-x64-windows"
             }
         },
         {
-            "name": "x64-release",
-            "displayName": "x64 Release",
-            "inherits": "x64-debug",
+            "name": "x64-release-msvc",
+            "displayName": "x64 Release (MSVC)",
+            "inherits": "msvc-base",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_CXX_FLAGS": "$env{MSVC_RELEASE_FLAGS}"
             }
         },
         {
-            "name": "x86-debug",
-            "displayName": "x86 Debug",
+            "name": "x64-release-profile-msvc",
+            "displayName": "x64 Release (Profiling, MSVC)",
+            "inherits": "msvc-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_CXX_FLAGS": "$env{MSVC_RELEASE_PROFILE_FLAGS}"
+            }
+        },
+        {
+            "name": "clang-cl-base",
+            "hidden": true,
             "inherits": "windows-base",
+            "environment": {
+                "CLANG_CL_BASE_FLAGS": "-Xclang -fexceptions -Xclang -fcxx-exceptions -Wall -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-unsafe-buffer-usage -Wno-c++20-compat -Wno-shadow-uncaptured-local",
+                "CLANG_CL_DEBUG_FLAGS": "$env{CLANG_CL_BASE_FLAGS}",
+                "CLANG_CL_RELEASE_FLAGS": "$env{CLANG_CL_BASE_FLAGS}"
+            },
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang-cl.exe",
+                "CMAKE_CXX_COMPILER": "clang-cl.exe",
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+            }
+        },
+        {
+            "name": "x64-debug-clang-cl",
+            "displayName": "x64 Debug (clang-cl)",
+            "inherits": "clang-cl-base",
             "architecture": {
-                "value": "x86",
+                "value": "x64",
                 "strategy": "external"
             },
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_CXX_FLAGS": "$env{CLANG_CL_DEBUG_FLAGS}"
             }
         },
         {
-            "name": "x86-release",
-            "displayName": "x86 Release",
-            "inherits": "x86-debug",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
-        },
-        {
-            "name": "linux-debug",
-            "displayName": "Linux Debug",
+            "name": "linux-base",
+            "hidden": true,
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/out/build/${presetName}",
             "installDir": "${sourceDir}/out/install/${presetName}",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            },
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",
                 "rhs": "Linux"
             },
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+            },
             "vendor": {
                 "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
                     "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
@@ -78,23 +114,14 @@
             }
         },
         {
-            "name": "macos-debug",
-            "displayName": "macOS Debug",
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/out/build/${presetName}",
-            "installDir": "${sourceDir}/out/install/${presetName}",
+            "name": "linux-debug-gcc",
+            "displayName": "Linux Debug (gcc)",
+            "inherits": "linux-base",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            },
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Darwin"
-            },
-            "vendor": {
-                "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
-                    "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
-                }
+                "CMAKE_C_COMPILER": "/usr/bin/gcc",
+                "CMAKE_CXX_COMPILER": "/usr/bin/g++",
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_CXX_FLAGS": "-Wall -Wextra -Wpedantic"
             }
         }
     ]
