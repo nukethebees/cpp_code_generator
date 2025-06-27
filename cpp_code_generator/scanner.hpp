@@ -3,14 +3,9 @@
 #include <string_view>
 #include <vector>
 
+#include "types.hpp"
+
 namespace ccg {
-struct Token;
-
-class Scanner {
-public:
-
-private:
-    std::vector<Token> tokens_;
-};
+class Scanner {};
 }
 

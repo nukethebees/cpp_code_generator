@@ -1,0 +1,77 @@
+#pragma once
+
+#include <cstdint>
+#include <string>
+#include <vector>
+
+namespace ccg {
+using TokenPosition = uint32_t;
+using TokenLength = uint16_t;
+using TokenIndex = uint32_t;
+
+enum class TokenType : uint8_t {
+    END_OF_FILE
+};
+
+class Tokens {
+private:
+    std::string token_chars_{""};
+    std::vector<TokenPosition> token_positions_;
+    std::vector<TokenLength> token_lengths_;
+    std::vector<TokenType> token_types_;
+};
+
+using TypeIndex = uint32_t;
+
+class Type {
+    TokenIndex name;
+    TypeIndex parameters_;
+    TypeIndex parameter_vec_index_;
+};
+
+class Types {
+    std::vector<Types> types_;
+    std::vector<TypeIndex> indexes_;
+};
+
+class Member {
+    TokenIndex name;
+    Type type;
+};
+
+class NamedArrayHeader {
+    TokenIndex name;
+    uint16_t type_index;
+};
+
+class NamedArrayField {
+    TokenIndex name;
+};
+
+class NamedArrays {
+    std::vector<Type> types;
+    std::vector<NamedArrayHeader> headers;
+    std::vector<NamedArrayField> fields;
+};
+
+struct UnionHeader {
+    uint16_t members_offset;
+    uint8_t members_length;
+    TokenIndex name;
+};
+
+class TaggedUnions {
+    std::vector<UnionHeader> headers_;
+    std::vector<Member> members_;
+};
+
+// All vectors have the same length instead of tracking separately
+class StructOfVectors {};
+
+class Module {
+private:
+    Tokens tokens_;
+    TaggedUnions unions_;
+    NamedArrays named_arrays_;
+};
+}
