@@ -34,7 +34,7 @@ private:
 using TypeIndex = uint32_t;
 
 class Type {
-    TokenIndex name;
+    TokenIndex name_;
     TypeIndex parameters_;
     TypeIndex parameter_vec_index_;
 };
@@ -45,29 +45,29 @@ class Types {
 };
 
 class Member {
-    TokenIndex name;
-    Type type;
+    TokenIndex name_;
+    Type type_;
 };
 
 class NamedArrayHeader {
-    TokenIndex name;
-    uint16_t type_index;
+    TokenIndex name_;
+    uint16_t type_index_;
 };
 
 class NamedArrayField {
-    TokenIndex name;
+    TokenIndex name_;
 };
 
 class NamedArrays {
-    std::vector<Type> types;
-    std::vector<NamedArrayHeader> headers;
-    std::vector<NamedArrayField> fields;
+    std::vector<Type> types_;
+    std::vector<NamedArrayHeader> headers_;
+    std::vector<NamedArrayField> fields_;
 };
 
-struct UnionHeader {
-    uint16_t members_offset;
-    uint8_t members_length;
-    TokenIndex name;
+class UnionHeader {
+    uint16_t members_offset_;
+    uint8_t members_length_;
+    TokenIndex name_;
 };
 
 class TaggedUnions {
@@ -90,10 +90,10 @@ enum class ErrorType : uint8_t {
 };
 
 class Error {
-    std::string message;
-    TokenPosition source_position;
-    TokenLength source_length;
-    ErrorType type;
+    std::string message_;
+    TokenPosition source_position_;
+    TokenLength source_length_;
+    ErrorType type_;
 };
 
 template <typename T>
