@@ -26,6 +26,13 @@ class Tokens {
   public:
     Tokens() = default;
 
+    void add(std::string_view lexeme, TokenPosition position, TokenType type) {
+        token_chars_ += lexeme;
+        token_positions_.push_back(position);
+        token_lengths_.push_back(static_cast<TokenLength>(lexeme.size()));
+        token_types_.push_back(type);
+    }
+
     // Member Access
     template <typename Self>
     auto&& token_chars(this Self&& self) {
@@ -278,7 +285,7 @@ class Module {
     NamedArrays named_arrays_;
 };
 
-enum class ErrorType : uint8_t { UNKNOWN, COMPILER_BUG, PLACEHOLDER };
+enum class ErrorType : uint8_t { UNKNOWN, COMPILER_BUG, PLACEHOLDER, UNEXPECTED_SCANNER_TOKEN };
 
 class Error {
   public:
