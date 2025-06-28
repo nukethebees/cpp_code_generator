@@ -26,11 +26,9 @@ auto Parser::module_item() -> ErrorOr<void> {
             auto kw{module_keyword_lookup(lex)};
 
             if (!kw) {
-                return std::unexpected(
-                    Error(std::format("Unexpected identifier while parsing module item: {}", lex),
-                          cur_position(),
-                          cur_length(),
-                          ErrorType::UNEXPECTED_PARSER_TOKEN));
+                return make_error(
+                    std::format("Unexpected identifier while parsing module item: {}", lex),
+                    ErrorType::UNEXPECTED_PARSER_TOKEN);
             }
 
             advance();
@@ -52,11 +50,8 @@ auto Parser::module_item() -> ErrorOr<void> {
         }
         default: {
             auto lex{cur_lexeme()};
-            return std::unexpected(
-                Error(std::format("Unexpected token while parsing module item: {}", lex),
-                      cur_position(),
-                      cur_length(),
-                      ErrorType::UNEXPECTED_PARSER_TOKEN));
+            return make_error(std::format("Unexpected token while parsing module item: {}", lex),
+                              ErrorType::UNEXPECTED_PARSER_TOKEN);
         }
     }
 
@@ -64,6 +59,10 @@ auto Parser::module_item() -> ErrorOr<void> {
 }
 
 auto Parser::named_array() -> ErrorOr<void> {
+    if (auto res{consume(TokenType::IDENTIFIER)}; !res) {
+        return std::unexpected(std::move(res.error()));
+    }
+
     return {};
 }
 }
