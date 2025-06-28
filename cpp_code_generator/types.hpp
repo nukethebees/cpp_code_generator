@@ -227,11 +227,37 @@ class StructOfVectors {
     StructOfVectors() = default;
 };
 
+class ParserOutput {
+  public:
+    ParserOutput() = default;
+    ParserOutput(TaggedUnions unions, NamedArrays named_arrays)
+        : unions_{std::move(unions)}
+        , named_arrays_{std::move(named_arrays)} {}
+
+    template <typename Self>
+    auto&& unions(this Self&& self) {
+        return std::forward<Self>(self).unions_;
+    }
+    template <typename Self>
+    auto&& named_arrays(this Self&& self) {
+        return std::forward<Self>(self).named_arrays_;
+    }
+  private:
+    TaggedUnions unions_;
+    NamedArrays named_arrays_;
+};
+
 class Module {
   public:
-    Module() = default;
+    Module() = delete;
+    Module(std::string_view name)
+        : name_{name} {}
 
     // Member Access
+    template <typename Self>
+    auto&& name(this Self&& self) {
+        return std::forward<Self>(self).name_;
+    }
     template <typename Self>
     auto&& tokens(this Self&& self) {
         return std::forward<Self>(self).tokens_;
@@ -245,12 +271,13 @@ class Module {
         return std::forward<Self>(self).named_arrays_;
     }
   private:
+    std::string_view name_;
     Tokens tokens_;
     TaggedUnions unions_;
     NamedArrays named_arrays_;
 };
 
-enum class ErrorType : uint8_t { UNKNOWN, COMPILER_BUG };
+enum class ErrorType : uint8_t { UNKNOWN, COMPILER_BUG, PLACEHOLDER };
 
 class Error {
   public:
@@ -281,11 +308,26 @@ class Error {
     auto&& type(this Self&& self) {
         return std::forward<Self>(self).type_;
     }
+
+    static auto placeholder_error() { return Error("Placeholder", 0, 0, ErrorType::PLACEHOLDER); }
   private:
     std::string message_;
     TokenPosition source_position_;
     TokenLength source_length_;
     ErrorType type_;
+};
+
+class CompilerOutput {
+    CompilerOutput() = delete;
+    CompilerOutput(std::string&& file)
+        : file_{std::move(file)} {}
+
+    template <typename Self>
+    auto&& file(this Self&& self) {
+        return std::forward<Self>(self).file_;
+    }
+  private:
+    std::string file_;
 };
 
 template <typename T>

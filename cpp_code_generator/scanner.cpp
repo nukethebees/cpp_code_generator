@@ -7,6 +7,6 @@ auto Scanner::scan(std::string_view file) -> ErrorOr<Tokens> {
 }
 
 auto Scanner::scan() -> ErrorOr<Tokens> {
-    return std::unexpected(Error("Foo", 0, 0, ErrorType::COMPILER_BUG));
+    return std::unexpected(Error::placeholder_error());
 }
 }
