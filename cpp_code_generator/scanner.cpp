@@ -11,6 +11,12 @@ auto Scanner::scan(std::string_view file) -> ErrorOr<Tokens> {
     return scanner.scan();
 }
 
+#define TOKEN_CASE(CHAR, TOKEN_TYPE) \
+    case CHAR: {                     \
+        add_token(TOKEN_TYPE);       \
+        break;                       \
+    }
+
 auto Scanner::scan() -> ErrorOr<Tokens> {
     Tokens tokens;
     TokenPosition base{0};
@@ -55,6 +61,21 @@ auto Scanner::scan() -> ErrorOr<Tokens> {
                 }
                 break;
             }
+                TOKEN_CASE(':', COLON)
+                TOKEN_CASE('[', LEFT_BRACKET)
+                TOKEN_CASE(']', RIGHT_BRACKET)
+                TOKEN_CASE('(', LEFT_PAREN)
+                TOKEN_CASE(')', RIGHT_PAREN)
+                TOKEN_CASE('{', LEFT_BRACE)
+                TOKEN_CASE('}', RIGHT_BRACE)
+                TOKEN_CASE(',', COMMA)
+                TOKEN_CASE('.', DOT)
+                TOKEN_CASE(';', SEMICOLON)
+            case '\t':
+                [[fallthrough]];
+            case ' ': {
+                break;
+            }
             case '\n': {
                 break;
             }
@@ -75,7 +96,7 @@ auto Scanner::scan() -> ErrorOr<Tokens> {
                 }
 
                 return std::unexpected(
-                    Error(std::format("Unexpected token in scanner: {}\n", get_lexeme()),
+                    Error(std::format("Unexpected token in scanner: \"{}\"\n", get_lexeme()),
                           base,
                           offset,
                           ErrorType::UNEXPECTED_SCANNER_TOKEN));
