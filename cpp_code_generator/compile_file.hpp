@@ -5,5 +5,5 @@
 #include "types.hpp"
 
 namespace ccg {
-auto compile_file(std::string_view file) -> ErrorOr<CompilerOutput>;
+auto compile_file(std::string_view module_name, std::string_view file) -> ErrorOr<CompilerOutput>;
 }

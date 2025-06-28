@@ -6,8 +6,8 @@
 #include "scanner.hpp"
 
 namespace ccg {
-auto compile_file(std::string_view name, std::string_view file) -> ErrorOr<CompilerOutput> {
-    Module mod{name};
+auto compile_file(std::string_view module_name, std::string_view file) -> ErrorOr<CompilerOutput> {
+    Module mod{module_name};
 
     auto scan{Scanner::scan(file)};
     if (!scan) {
