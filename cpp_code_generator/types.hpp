@@ -4,6 +4,14 @@
 #include <string>
 #include <vector>
 
+// todo: enum + enum to string[_view]
+// todo: array with types as keys 
+// e.g. container of Foo<U...>. foo.get<int> to get Foo<int> instance
+// todo: string-enum pair generation (for things like tokens)
+// todo: struct of vectors
+// todo: struct of arrays
+// todo: tagged union
+
 namespace ccg {
 using TokenPosition = uint32_t;
 using TokenLength = uint16_t;
@@ -14,6 +22,7 @@ enum class TokenType : uint8_t {
 };
 
 class Tokens {
+    Tokens() = default;
 private:
     std::string token_chars_{""};
     std::vector<TokenPosition> token_positions_;
