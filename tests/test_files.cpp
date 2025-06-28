@@ -42,9 +42,15 @@ class PassFileTest : public testing::TestWithParam<PassTestFileInput> {};
 TEST_P(PassFileTest, compile_file) {
     auto const& param{GetParam()};
 
+#if 1
+    if (param.test_name == "comment_file_eof") {
+        auto x{1};
+    }
+#endif
+
     auto result{ccg::compile_file(param.test_name, param.file_input)};
 
-    ASSERT_TRUE(result);
+    ASSERT_TRUE(result) << result.error().message();
     EXPECT_EQ(*result, param.expected_output);
 }
 
