@@ -38,10 +38,10 @@ auto Scanner::scan() -> ErrorOr<Tokens> {
         using enum TokenType;
 
         buffer.clear();
-        auto cur_char{get_char()};
+        auto c{get_char()};
         offset++;
 
-        switch (cur_char) {
+        switch (c) {
             case '/': {
                 if (get_char() == '/') {
                     auto next{peek()};
@@ -63,6 +63,17 @@ auto Scanner::scan() -> ErrorOr<Tokens> {
                 goto end;
             }
             default: {
+                if (is_identifier_char(c)) {
+                    auto next{peek()};
+                    while (is_inner_identifier_char(next)) {
+                        offset++;
+                        next = peek();
+                    }
+                    offset++;
+                    add_token(IDENTIFIER);
+                    break;
+                }
+
                 return std::unexpected(
                     Error(std::format("Unexpected token in scanner: {}\n", get_lexeme()),
                           base,
