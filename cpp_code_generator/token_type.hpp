@@ -4,6 +4,9 @@
 #include <cstdint>
 #include <string>
 #include <string_view>
+#include <optional>
+
+#include "string_hasher.hpp"
 
 enum class TokenType : uint8_t {
     // Numeric Operators
@@ -61,19 +64,7 @@ enum class TokenType : uint8_t {
     CHAR,
 
     // Keywords
-    IF,
-    ELSE,
-    FOR,
-    WHILE,
-    RETURN,
-    BREAK,
-    CONTINUE,
-    FUNCTION,
-    VAR,
-    CONST,
-    TRUE_TOKEN,
-    FALSE_TOKEN,
-    NULL_TOKEN,
+    NAMED_ARRAY,
 
     // Special
     END_OF_FILE,
@@ -171,32 +162,8 @@ inline std::string_view to_string_view(TokenType type) {
             return "STRING";
         case CHAR:
             return "CHAR";
-        case IF:
-            return "IF";
-        case ELSE:
-            return "ELSE";
-        case FOR:
-            return "FOR";
-        case WHILE:
-            return "WHILE";
-        case RETURN:
-            return "RETURN";
-        case BREAK:
-            return "BREAK";
-        case CONTINUE:
-            return "CONTINUE";
-        case FUNCTION:
-            return "FUNCTION";
-        case VAR:
-            return "VAR";
-        case CONST:
-            return "CONST";
-        case TRUE_TOKEN:
-            return "TRUE";
-        case FALSE_TOKEN:
-            return "FALSE";
-        case NULL_TOKEN:
-            return "NULL";
+        case NAMED_ARRAY:
+            return "NAMED_ARRAY";
         case SLASH_SLASH:
             return "SLASH_SLASH";
         case END_OF_FILE:
@@ -299,32 +266,8 @@ inline std::string_view token_string_view(TokenType type) {
             return "string";
         case CHAR:
             return "char";
-        case IF:
-            return "if";
-        case ELSE:
-            return "else";
-        case FOR:
-            return "for";
-        case WHILE:
-            return "while";
-        case RETURN:
-            return "return";
-        case BREAK:
-            return "break";
-        case CONTINUE:
-            return "continue";
-        case FUNCTION:
-            return "function";
-        case VAR:
-            return "var";
-        case CONST:
-            return "const";
-        case TRUE_TOKEN:
-            return "true";
-        case FALSE_TOKEN:
-            return "false";
-        case NULL_TOKEN:
-            return "null";
+        case NAMED_ARRAY:
+            return "named_array";
         case SLASH_SLASH:
             return "//";
         case END_OF_FILE:
@@ -336,4 +279,15 @@ inline std::string_view token_string_view(TokenType type) {
 
 inline std::string token_string(TokenType type) {
     return std::string(token_string_view(type));
+}
+
+inline std::optional<TokenType> module_keyword_lookup(std::string_view str) {
+    static const ccg::StringMap<TokenType> keyword_map = {
+        {"named_array", TokenType::NAMED_ARRAY}
+    };
+    auto it = keyword_map.find(str);
+    if (it != keyword_map.end()) {
+        return it->second;
+    }
+    return std::nullopt;
 }

@@ -13,6 +13,7 @@ class Parser {
 
     auto parse() -> ErrorOr<void>;
     auto module_item() -> ErrorOr<void>;
+    auto named_array() -> ErrorOr<void>;
 
     void advance() { i++; }
 

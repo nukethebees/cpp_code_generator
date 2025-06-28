@@ -42,7 +42,7 @@ class PassFileTest : public testing::TestWithParam<PassTestFileInput> {};
 TEST_P(PassFileTest, compile_file) {
     auto const& param{GetParam()};
 
-#if 1
+#if 0
     if (param.test_name == "comment_file_eof") {
         auto x{1};
     }
