@@ -51,6 +51,8 @@ TEST_P(PassFileTest, compile_file) {
 static auto create_pass_inputs() -> std::vector<PassTestFileInput> {
     std::vector<PassTestFileInput> inputs;
     inputs.emplace_back("empty_file", "", "\n"s);
+    inputs.emplace_back("comment_file_eof", "// This is a comment", "\n"s);
+    inputs.emplace_back("comment_file", "// This is a comment\n", "\n"s);
     return inputs;
 }
 
