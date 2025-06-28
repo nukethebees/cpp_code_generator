@@ -1,10 +1,11 @@
 #pragma once
 
+#include <compare>
 #include <cstdint>
 #include <expected>
 #include <string>
-#include <vector>
 #include <utility>
+#include <vector>
 
 // todo: enum + enum to string[_view]
 // todo: array with types as keys
@@ -318,6 +319,7 @@ class Error {
 };
 
 class CompilerOutput {
+  public:
     CompilerOutput() = delete;
     CompilerOutput(std::string&& file)
         : file_{std::move(file)} {}
@@ -326,6 +328,8 @@ class CompilerOutput {
     auto&& file(this Self&& self) {
         return std::forward<Self>(self).file_;
     }
+
+    auto operator<=>(CompilerOutput const&) const = default;
   private:
     std::string file_;
 };
