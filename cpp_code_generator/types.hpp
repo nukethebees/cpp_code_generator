@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <expected>
 #include <string>
 #include <vector>
 
@@ -83,4 +84,18 @@ private:
     TaggedUnions unions_;
     NamedArrays named_arrays_;
 };
+
+enum class ErrorType : uint8_t {
+    UNKNOWN, COMPILER_BUG
+};
+
+class Error {
+    std::string message;
+    TokenPosition source_position;
+    TokenLength source_length;
+    ErrorType type;
+};
+
+template <typename T>
+using ErrorOr = std::expected<T, Error>;
 }
