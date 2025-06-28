@@ -75,6 +75,9 @@ enum class TokenType : uint8_t {
     FALSE_TOKEN,
     NULL_TOKEN,
 
+    // Special
+    END_OF_FILE,
+
     // Sentinel
     TOKEN_TYPE_COUNT
 };
@@ -196,6 +199,8 @@ inline std::string_view to_string_view(TokenType type) {
             return "NULL";
         case SLASH_SLASH:
             return "SLASH_SLASH";
+        case END_OF_FILE:
+            return "END_OF_FILE";
         default:
             return "UNKNOWN";
     }
@@ -322,6 +327,8 @@ inline std::string_view token_string_view(TokenType type) {
             return "null";
         case SLASH_SLASH:
             return "//";
+        case END_OF_FILE:
+            return "\\0";
         default:
             return "";
     }

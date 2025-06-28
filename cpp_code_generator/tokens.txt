@@ -46,6 +46,9 @@ DOT "."
 ARROW "->"
 SLASH_SLASH "//"
 
+// Special
+END_OF_FILE "\0"
+
 // Literals
 NUMBER "number"
 IDENTIFIER "identifier"
