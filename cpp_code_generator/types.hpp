@@ -14,12 +14,12 @@
 // todo: struct of arrays
 // todo: tagged union
 
+#include "token_type.hpp"
+
 namespace ccg {
 using TokenPosition = uint32_t;
 using TokenLength = uint16_t;
 using TokenIndex = uint32_t;
-
-enum class TokenType : uint8_t { END_OF_FILE };
 
 class Tokens {
   public:

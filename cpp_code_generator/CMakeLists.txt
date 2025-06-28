@@ -8,4 +8,5 @@ target_sources(cpp_code_generator PUBLIC
   FILES
   "scanner.hpp"
   "types.hpp"
+  "token_type.hpp"
 )
