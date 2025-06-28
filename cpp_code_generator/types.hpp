@@ -320,7 +320,7 @@ class Error {
 
 class CompilerOutput {
   public:
-    CompilerOutput() = delete;
+    CompilerOutput() = default;
     CompilerOutput(std::string&& file)
         : file_{std::move(file)} {}
 

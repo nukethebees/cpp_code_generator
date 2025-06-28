@@ -7,6 +7,7 @@ auto Scanner::scan(std::string_view file) -> ErrorOr<Tokens> {
 }
 
 auto Scanner::scan() -> ErrorOr<Tokens> {
-    return std::unexpected(Error::placeholder_error());
+    Tokens tokens;
+    return tokens;
 }
 }

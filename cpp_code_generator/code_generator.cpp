@@ -7,6 +7,8 @@ auto CodeGenerator::generate(Module const& mod) -> ErrorOr<CompilerOutput> {
 }
 
 auto CodeGenerator::generate() -> ErrorOr<CompilerOutput> {
-    return std::unexpected(Error::placeholder_error());
+    CompilerOutput output;
+    output.file() += "\n";
+    return output;
 }
 }
