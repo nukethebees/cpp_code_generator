@@ -94,9 +94,9 @@ using TypeIndex = uint32_t;
 class Type {
   public:
     Type() = delete;
-    Type(TokenIndex name, TypeIndex parameters, TypeIndex parameter_vec_index)
-        : name_(name)
-        , parameters_(parameters)
+    Type(TokenIndex name, std::size_t parameters, TypeIndex parameter_vec_index)
+        : parameters_(parameters)
+        , name_(name)
         , parameter_vec_index_(parameter_vec_index) {}
 
     // Member Access
@@ -113,8 +113,8 @@ class Type {
         return std::forward<Self>(self).parameter_vec_index_;
     }
   private:
+    std::size_t parameters_;
     TokenIndex name_;
-    TypeIndex parameters_;
     TypeIndex parameter_vec_index_;
 };
 
@@ -131,11 +131,19 @@ class Types {
     auto&& indexes(this Self&& self) {
         return std::forward<Self>(self).indexes_;
     }
-    auto lookup_or_add(std::string_view name) -> TypeIndex {
+    auto lookup_or_add(Tokens const& tokens, TokenIndex name_idx) -> TypeIndex {
+        auto name{tokens.lexeme(name_idx)};
         auto lu{name_lookup_.find(name)};
 
-        if (lu == name_lookup_.end()) {}
+        if (lu == name_lookup_.end()) {
+            return add(tokens, name_idx);
+        }
         return lu->second;
+    }
+    auto add(Tokens const& tokens, TokenIndex name_idx) -> TypeIndex {
+        auto name{tokens.lexeme(name_idx)};
+        types_.emplace_back(name_idx, 0, static_cast<TypeIndex>(indexes_.size()));
+        return 0;
     }
   private:
     std::vector<Type> types_;
@@ -193,7 +201,7 @@ class ParsedNamedArray {
 class NamedArrayHeader {
   public:
     NamedArrayHeader() = delete;
-    NamedArrayHeader(TokenIndex name, uint16_t type_index)
+    NamedArrayHeader(TokenIndex name, TypeIndex type_index)
         : name_(name)
         , type_index_(type_index) {}
 
@@ -208,7 +216,7 @@ class NamedArrayHeader {
     }
   private:
     TokenIndex name_;
-    uint16_t type_index_;
+    TypeIndex type_index_;
 };
 
 class NamedArrayField {
@@ -232,10 +240,6 @@ class NamedArrays {
 
     // Member Access
     template <typename Self>
-    auto&& types(this Self&& self) {
-        return std::forward<Self>(self).types_;
-    }
-    template <typename Self>
     auto&& headers(this Self&& self) {
         return std::forward<Self>(self).headers_;
     }
@@ -244,7 +248,6 @@ class NamedArrays {
         return std::forward<Self>(self).fields_;
     }
   private:
-    std::vector<Type> types_;
     std::vector<NamedArrayHeader> headers_;
     std::vector<NamedArrayField> fields_;
 };
@@ -334,6 +337,10 @@ class Module {
     template <typename Self>
     auto&& named_arrays(this Self&& self) {
         return std::forward<Self>(self).named_arrays_;
+    }
+    template <typename Self>
+    auto&& types(this Self&& self) {
+        return std::forward<Self>(self).types_;
     }
   private:
     std::string_view name_;

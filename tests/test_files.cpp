@@ -37,6 +37,17 @@ Expected output:
                        input.expected_output.file());
 }
 
+namespace ccg {
+inline void PrintTo(CompilerOutput output, std::ostream* os) {
+    *os << std::format(R"(Compiler output:
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+{}[END_OF_FILE]
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+)",
+                       output.file());
+}
+}
+
 class PassFileTest : public testing::TestWithParam<PassTestFileInput> {};
 
 TEST_P(PassFileTest, compile_file) {
@@ -60,11 +71,13 @@ static auto create_pass_inputs() -> std::vector<PassTestFileInput> {
     inputs.emplace_back("comment_file_eof", "// This is a comment", "\n"s);
     inputs.emplace_back("comment_file", "// This is a comment\n", "\n"s);
     inputs.emplace_back("comment_file_2", "//Foo\n//Bar\n", "\n"s);
-    inputs.emplace_back("named_array_int_1m", R"(
+    inputs.emplace_back("named_array_int_1m",
+                        R"(
 named_array Foo : int {
     fields: foo, bar, baz;
 }
-)", R"(
+)",
+                        R"(
 )"s);
     return inputs;
 }

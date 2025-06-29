@@ -13,7 +13,14 @@ auto AstProcessor::process() -> ErrorOr<void> {
     return {};
 }
 auto AstProcessor::named_arrays() -> ErrorOr<void> {
-    for (auto const& na : parser_output_.named_arrays()) {}
+    auto const& tokens{mod_.tokens()};
+
+    for (auto const& na : parser_output_.named_arrays()) {
+        auto type_token{na.type()};
+        auto type_index{mod_.types().lookup_or_add(tokens, type_token)};
+        mod_.named_arrays().headers().emplace_back(na.name(), type_index);
+    }
+
     return {};
 }
 }
