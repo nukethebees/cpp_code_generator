@@ -16,7 +16,7 @@ auto compile_file(std::string_view module_name, std::string_view file) -> ErrorO
     mod.tokens() = std::move(*scan);
 
     TRY_ASSIGN(parse, Parser::parse(mod.tokens()));
-    TRY_ASSIGN(proc, AstProcessor::process(*parse));
+    TRY_ASSIGN(proc, AstProcessor::process(*parse, mod));
 
     return CodeGenerator::generate(mod);
 }
