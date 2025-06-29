@@ -1,25 +1,22 @@
 #pragma once
 
+#include "ast_processor.hpp"
 #include "code_generator.hpp"
 #include "compile_file.hpp"
 #include "parser.hpp"
 #include "scanner.hpp"
 
+#include "result_macros.hpp"
+
 namespace ccg {
 auto compile_file(std::string_view module_name, std::string_view file) -> ErrorOr<CompilerOutput> {
     Module mod{module_name};
 
-    auto scan{Scanner::scan(file)};
-    if (!scan) {
-        return std::unexpected(std::move(scan.error()));
-    }
-
+    TRY_ASSIGN(scan, Scanner::scan(file));
     mod.tokens() = std::move(*scan);
 
-    auto parse{Parser::parse(mod.tokens())};
-    if (!parse) {
-        return std::unexpected(std::move(parse.error()));
-    }
+    TRY_ASSIGN(parse, Parser::parse(mod.tokens()));
+    TRY_ASSIGN(proc, AstProcessor::process(*parse));
 
     return CodeGenerator::generate(mod);
 }
