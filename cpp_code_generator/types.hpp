@@ -131,10 +131,16 @@ class Types {
     auto&& indexes(this Self&& self) {
         return std::forward<Self>(self).indexes_;
     }
+    auto lookup_or_add(std::string_view name) -> TypeIndex {
+        auto lu{name_lookup_.find(name)};
+
+        if (lu == name_lookup_.end()) {}
+        return lu->second;
+    }
   private:
     std::vector<Type> types_;
     std::vector<TypeIndex> indexes_;
-    std::unordered_map<std::string, TypeIndex> name_lookup;
+    StringMap<TypeIndex> name_lookup_;
 };
 
 class Member {
@@ -314,6 +320,7 @@ class Module {
   private:
     std::string_view name_;
     Tokens tokens_;
+    Types types_;
     TaggedUnions unions_;
     NamedArrays named_arrays_;
 };
