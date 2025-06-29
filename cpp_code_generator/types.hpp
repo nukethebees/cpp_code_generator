@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <expected>
 #include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -16,6 +17,7 @@
 // todo: tagged union
 
 #include "token_type.hpp"
+#include "string_hasher.hpp"
 
 namespace ccg {
 using TokenPosition = uint32_t;
@@ -130,8 +132,9 @@ class Types {
         return std::forward<Self>(self).indexes_;
     }
   private:
-    std::vector<Types> types_;
+    std::vector<Type> types_;
     std::vector<TypeIndex> indexes_;
+    std::unordered_map<std::string, TypeIndex> name_lookup;
 };
 
 class Member {
