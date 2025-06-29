@@ -3,13 +3,12 @@
 #include "parser.hpp"
 #include "token_type.hpp"
 
+#include "result_macros.hpp"
+
 namespace ccg {
 auto Parser::parse(Tokens const& tokens) -> ErrorOr<ParserOutput> {
     auto parser{Parser(tokens)};
-    auto res{parser.parse()};
-    if (!res) {
-        return std::unexpected(std::move(res.error()));
-    }
+    TRY(parser.parse());
     return std::move(parser.output);
 }
 
@@ -34,9 +33,7 @@ auto Parser::module_item() -> ErrorOr<void> {
             advance();
             switch (*kw) {
                 case NAMED_ARRAY: {
-                    if (auto res{named_array()}; !res) {
-                        return std::unexpected(std::move(res.error()));
-                    }
+                    TRY(named_array());
                     break;
                 }
                 default: {
@@ -59,9 +56,24 @@ auto Parser::module_item() -> ErrorOr<void> {
 }
 
 auto Parser::named_array() -> ErrorOr<void> {
-    if (auto res{consume(TokenType::IDENTIFIER)}; !res) {
-        return std::unexpected(std::move(res.error()));
+    TRY_ASSIGN(name, consume_index(TokenType::IDENTIFIER));
+    TRY(consume(TokenType::COLON));
+    TRY_ASSIGN(type, consume_index(TokenType::IDENTIFIER));
+    TRY(consume(TokenType::LEFT_BRACE));
+
+    TRY(consume("fields"));
+    TRY(consume(TokenType::COLON));
+
+    bool first{true};
+    while (!match(TokenType::SEMICOLON)) {
+        if (!first) {
+            TRY(consume(TokenType::COMMA));
+        }
+        first = false;
+        TRY_ASSIGN(field_name, consume_index(TokenType::IDENTIFIER));
     }
+
+    TRY(consume(TokenType::RIGHT_BRACE));
 
     return {};
 }

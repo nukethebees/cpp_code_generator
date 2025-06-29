@@ -16,4 +16,5 @@ target_sources(cpp_code_generator PUBLIC
   "types.hpp"
   "token_type.hpp"
   "string_hasher.hpp"
+  "result_macros.hpp"
 )

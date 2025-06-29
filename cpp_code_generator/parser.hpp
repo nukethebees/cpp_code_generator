@@ -7,6 +7,8 @@
 
 namespace ccg {
 class Parser {
+  public:
+    using Index = std::size_t;
   private:
     Parser() = delete;
     Parser(Tokens const& tokens)
@@ -36,13 +38,42 @@ class Parser {
                 std::format("Expected {}, got {}.\n", to_string_view(type), to_string_view(cur)),
                 ErrorType::UNEXPECTED_PARSER_TOKEN);
         }
+        advance();
         return {};
+    }
+    auto consume(std::string_view lexeme) -> ErrorOr<void> {
+        auto cur{cur_lexeme()};
+        if (cur != lexeme) {
+            return make_error(std::format("Expected {}, got {}.\n", lexeme, cur),
+                              ErrorType::UNEXPECTED_PARSER_TOKEN);
+        }
+        advance();
+        return {};
+    }
+    // Returns the index
+    auto consume_index(TokenType type) -> ErrorOr<Index> {
+        auto idx{i};
+        auto cur{cur_type()};
+        if (cur != type) {
+            return make_error(
+                std::format("Expected {}, got {}.\n", to_string_view(type), to_string_view(cur)),
+                ErrorType::UNEXPECTED_PARSER_TOKEN);
+        }
+        advance();
+        return idx;
+    }
+    auto match(TokenType type) -> bool {
+        if (cur_type() == type) {
+            advance();
+            return true;
+        }
+        return false;
     }
   public:
     static auto parse(Tokens const& tokens) -> ErrorOr<ParserOutput>;
   private:
     ParserOutput output;
     Tokens const& tokens_{};
-    std::size_t i{0};
+    Index i{0};
 };
 }
