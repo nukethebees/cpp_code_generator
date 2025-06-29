@@ -7,8 +7,6 @@
 
 namespace ccg {
 class Parser {
-  public:
-    using Index = std::size_t;
   private:
     Parser() = delete;
     Parser(Tokens const& tokens)
@@ -51,7 +49,7 @@ class Parser {
         return {};
     }
     // Returns the index
-    auto consume_index(TokenType type) -> ErrorOr<Index> {
+    auto consume_index(TokenType type) -> ErrorOr<TokenIndex> {
         auto idx{i};
         auto cur{cur_type()};
         if (cur != type) {
@@ -74,6 +72,6 @@ class Parser {
   private:
     ParserOutput output;
     Tokens const& tokens_{};
-    Index i{0};
+    TokenIndex i{0};
 };
 }

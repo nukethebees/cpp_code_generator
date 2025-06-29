@@ -164,6 +164,32 @@ class Member {
     Type type_;
 };
 
+class ParsedNamedArray {
+  public:
+    ParsedNamedArray() = default;
+    ParsedNamedArray(TokenIndex name, TokenIndex type, std::vector<TokenIndex>&& field_indexes)
+        : name_{name}
+        , type_{type}
+        , field_indexes_{std::move(field_indexes)} {}
+
+    template <typename Self>
+    auto&& name(this Self&& self) {
+        return std::forward<Self>(self).name_;
+    }
+    template <typename Self>
+    auto&& type(this Self&& self) {
+        return std::forward<Self>(self).type_;
+    }
+    template <typename Self>
+    auto&& field_indexes(this Self&& self) {
+        return std::forward<Self>(self).field_indexes_;
+    }
+  private:
+    TokenIndex name_;
+    TokenIndex type_;
+    std::vector<TokenIndex> field_indexes_;
+};
+
 class NamedArrayHeader {
   public:
     NamedArrayHeader() = delete;
@@ -277,21 +303,13 @@ class StructOfVectors {
 class ParserOutput {
   public:
     ParserOutput() = default;
-    ParserOutput(TaggedUnions unions, NamedArrays named_arrays)
-        : unions_{std::move(unions)}
-        , named_arrays_{std::move(named_arrays)} {}
 
-    template <typename Self>
-    auto&& unions(this Self&& self) {
-        return std::forward<Self>(self).unions_;
-    }
     template <typename Self>
     auto&& named_arrays(this Self&& self) {
         return std::forward<Self>(self).named_arrays_;
     }
   private:
-    TaggedUnions unions_;
-    NamedArrays named_arrays_;
+    std::vector<ParsedNamedArray> named_arrays_;
 };
 
 class Module {

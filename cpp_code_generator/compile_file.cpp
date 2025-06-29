@@ -21,9 +21,6 @@ auto compile_file(std::string_view module_name, std::string_view file) -> ErrorO
         return std::unexpected(std::move(parse.error()));
     }
 
-    mod.named_arrays() = std::move(parse->named_arrays());
-    mod.unions() = std::move(parse->unions());
-
     return CodeGenerator::generate(mod);
 }
 }

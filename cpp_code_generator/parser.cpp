@@ -64,6 +64,7 @@ auto Parser::named_array() -> ErrorOr<void> {
     TRY(consume("fields"));
     TRY(consume(TokenType::COLON));
 
+    std::vector<TokenIndex> field_indexes;
     bool first{true};
     while (!match(TokenType::SEMICOLON)) {
         if (!first) {
@@ -71,9 +72,11 @@ auto Parser::named_array() -> ErrorOr<void> {
         }
         first = false;
         TRY_ASSIGN(field_name, consume_index(TokenType::IDENTIFIER));
+        field_indexes.push_back(*field_name);
     }
-
     TRY(consume(TokenType::RIGHT_BRACE));
+
+    output.named_arrays().emplace_back(*name, *type, std::move(field_indexes));
 
     return {};
 }
