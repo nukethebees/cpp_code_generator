@@ -198,12 +198,18 @@ class ParsedNamedArray {
     std::vector<TokenIndex> field_indexes_;
 };
 
+using NamedArrayFieldIndex = uint16_t;
 class NamedArrayHeader {
   public:
     NamedArrayHeader() = delete;
-    NamedArrayHeader(TokenIndex name, TypeIndex type_index)
+    NamedArrayHeader(TokenIndex name,
+                     TypeIndex type_index,
+                     NamedArrayFieldIndex field_index_start,
+                     NamedArrayFieldIndex field_indexes)
         : name_(name)
-        , type_index_(type_index) {}
+        , type_index_(type_index)
+        , field_index_start_{field_index_start}
+        , field_indexes_{field_indexes} {}
 
     // Member Access
     template <typename Self>
@@ -214,9 +220,19 @@ class NamedArrayHeader {
     auto&& type_index(this Self&& self) {
         return std::forward<Self>(self).type_index_;
     }
+    template <typename Self>
+    auto&& field_index_start(this Self&& self) {
+        return std::forward<Self>(self).field_index_start_;
+    }
+    template <typename Self>
+    auto&& field_indexes(this Self&& self) {
+        return std::forward<Self>(self).field_indexes_;
+    }
   private:
     TokenIndex name_;
     TypeIndex type_index_;
+    NamedArrayFieldIndex field_index_start_;
+    NamedArrayFieldIndex field_indexes_;
 };
 
 class NamedArrayField {
