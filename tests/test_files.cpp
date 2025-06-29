@@ -8,6 +8,8 @@
 #include "cpp_code_generator/compile_file.hpp"
 #include "cpp_code_generator/types.hpp"
 
+#include "gtest_printing.hpp"
+
 using namespace std::string_literals;
 
 struct PassTestFileInput {
@@ -35,17 +37,6 @@ Expected output:
                        input.test_name,
                        input.file_input,
                        input.expected_output.file());
-}
-
-namespace ccg {
-inline void PrintTo(CompilerOutput output, std::ostream* os) {
-    *os << std::format(R"(Compiler output:
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-{}[END_OF_FILE]
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-)",
-                       output.file());
-}
 }
 
 class PassFileTest : public testing::TestWithParam<PassTestFileInput> {};
