@@ -90,35 +90,35 @@ class Foo {
     // Iterators
     template <typename Self>
     auto begin(this Self&& self) {
-        return return std::forward<Self>(self).elems_.begin();
+        return std::forward<Self>(self).elems_.begin();
     }
     template <typename Self>
     auto end(this Self&& self) {
-        return return std::forward<Self>(self).elems_.end();
+        return std::forward<Self>(self).elems_.end();
     }
     template <typename Self>
     auto cbegin(this Self&& self) {
-        return return std::forward<Self>(self).elems_.cbegin();
+        return std::forward<Self>(self).elems_.cbegin();
     }
     template <typename Self>
     auto cend(this Self&& self) {
-        return return std::forward<Self>(self).elems_.cend();
+        return std::forward<Self>(self).elems_.cend();
     }
     template <typename Self>
     auto rbegin(this Self&& self) {
-        return return std::forward<Self>(self).elems_.rbegin();
+        return std::forward<Self>(self).elems_.rbegin();
     }
     template <typename Self>
     auto rend(this Self&& self) {
-        return return std::forward<Self>(self).elems_.rend();
+        return std::forward<Self>(self).elems_.rend();
     }
     template <typename Self>
     auto crbegin(this Self&& self) {
-        return return std::forward<Self>(self).elems_.crbegin();
+        return std::forward<Self>(self).elems_.crbegin();
     }
     template <typename Self>
     auto crend(this Self&& self) {
-        return return std::forward<Self>(self).elems_.crend();
+        return std::forward<Self>(self).elems_.crend();
     }
   private:
     std::array<int, 3> elems_;

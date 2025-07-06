@@ -77,7 +77,7 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
         for (auto in : iter_names) {
             output_.file() += std::format(R"(    template <typename Self>
     auto {0}(this Self&& self) {{
-        return return std::forward<Self>(self).elems_.{0}();
+        return std::forward<Self>(self).elems_.{0}();
     }}
 )",
                                           in);
