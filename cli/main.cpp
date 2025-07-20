@@ -7,17 +7,11 @@
 
 #include <CLI/CLI.hpp>
 
+#include <cpp_utils/file_io.hpp>
+
 #include "cpp_code_generator/compile_file.hpp"
 
-static auto read_file(std::filesystem::path path) -> std::string {
-    std::ifstream const t(path);
-    std::stringstream buffer;
-    buffer << t.rdbuf();
-
-    return buffer.str();
-}
-
-auto main(int argc, char* argv[]) -> int {
+auto main(int argc, char * argv[]) -> int {
     CLI::App app{
         std::format("C++ code generator.\nBuild date (time): {} ({})\n", __DATE__, __TIME__)};
 
@@ -34,15 +28,14 @@ auto main(int argc, char* argv[]) -> int {
     auto out_path{in_path.parent_path() / in_path.stem()};
     out_path += ".hpp";
 
-    auto file{read_file(in_path)};
+    auto file{ml::read_file(in_path)};
     auto result{ccg::compile_file("PLACEHOLDER_MODULE_NAME", file)};
     if (!result) {
         std::print("{}\n", result.error().message());
         return -1;
     }
 
-    std::ofstream out_stream{out_path};
-    out_stream << result->file();
+    ml::write_file(out_path, result->file());
 
     return 0;
 }

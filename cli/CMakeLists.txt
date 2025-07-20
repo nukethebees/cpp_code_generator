@@ -7,6 +7,8 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(cli11_proj)
 
+find_package(ml_cpp_utils REQUIRED)
+
 add_executable(cli
     main.cpp 
 )
@@ -15,6 +17,7 @@ target_link_libraries(cli
     PRIVATE 
         cpp_code_generator
         CLI11::CLI11
+        ml_cpp_utils::cpp_utils
 )
 
 set_target_properties(cli PROPERTIES

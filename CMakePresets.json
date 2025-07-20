@@ -13,7 +13,6 @@
                 "rhs": "Windows"
             },
             "cacheVariables": {
-                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/triplets",
                 "CMAKE_CXX_STANDARD": "23"
             }
         },
