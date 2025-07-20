@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "types.hpp"
+#include "error.hpp"
 
 namespace ccg {
 inline auto is_digit(char c) -> bool {

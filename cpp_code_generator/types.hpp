@@ -18,12 +18,9 @@
 
 #include "token_type.hpp"
 #include "string_hasher.hpp"
+#include "token_types.hpp"
 
 namespace ccg {
-using TokenPosition = uint32_t;
-using TokenLength = uint16_t;
-using TokenIndex = uint32_t;
-
 class Tokens {
   public:
     Tokens() = default;
@@ -365,69 +362,4 @@ class Module {
     TaggedUnions unions_;
     NamedArrays named_arrays_;
 };
-
-enum class ErrorType : uint8_t {
-    UNKNOWN,
-    COMPILER_BUG,
-    PLACEHOLDER,
-    UNEXPECTED_PARSER_TOKEN,
-    UNEXPECTED_SCANNER_TOKEN
-};
-
-class Error {
-  public:
-    Error() = delete;
-    Error(std::string const& message,
-          TokenPosition source_position,
-          TokenLength source_length,
-          ErrorType type)
-        : message_(message)
-        , source_position_(source_position)
-        , source_length_(source_length)
-        , type_(type) {}
-
-    // Member Access
-    template <typename Self>
-    auto&& message(this Self&& self) {
-        return std::forward<Self>(self).message_;
-    }
-    template <typename Self>
-    auto&& source_position(this Self&& self) {
-        return std::forward<Self>(self).source_position_;
-    }
-    template <typename Self>
-    auto&& source_length(this Self&& self) {
-        return std::forward<Self>(self).source_length_;
-    }
-    template <typename Self>
-    auto&& type(this Self&& self) {
-        return std::forward<Self>(self).type_;
-    }
-
-    static auto placeholder_error() { return Error("Placeholder", 0, 0, ErrorType::PLACEHOLDER); }
-  private:
-    std::string message_;
-    TokenPosition source_position_;
-    TokenLength source_length_;
-    ErrorType type_;
-};
-
-class CompilerOutput {
-  public:
-    CompilerOutput() = default;
-    CompilerOutput(std::string&& file)
-        : file_{std::move(file)} {}
-
-    template <typename Self>
-    auto&& file(this Self&& self) {
-        return std::forward<Self>(self).file_;
-    }
-
-    auto operator<=>(CompilerOutput const&) const = default;
-  private:
-    std::string file_;
-};
-
-template <typename T>
-using ErrorOr = std::expected<T, Error>;
 }

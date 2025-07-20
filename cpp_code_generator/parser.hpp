@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <format>
 
+#include "error.hpp"
 #include "types.hpp"
 
 namespace ccg {

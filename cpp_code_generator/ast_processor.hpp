@@ -1,6 +1,7 @@
 #pragma once
 
 #include "types.hpp"
+#include "error.hpp"
 
 namespace ccg {
 class AstProcessor {
