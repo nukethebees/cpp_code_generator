@@ -17,7 +17,7 @@ target_link_libraries(cli
     PRIVATE 
         cpp_code_generator
         CLI11::CLI11
-        ml_cpp_utils::cpp_utils
+        ml_cpp_utils::ml_cpp_utils
 )
 
 set_target_properties(cli PROPERTIES
