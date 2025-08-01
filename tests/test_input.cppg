@@ -1,0 +1,3 @@
+named_array Foo : int {
+    fields: foo, bar, baz;
+}
