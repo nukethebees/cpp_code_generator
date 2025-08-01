@@ -11,7 +11,7 @@
 
 #include "cpp_code_generator/compile_file.hpp"
 
-auto main(int argc, char * argv[]) -> int {
+auto main(int argc, char* argv[]) -> int {
     CLI::App app{
         std::format("C++ code generator.\nBuild date (time): {} ({})\n", __DATE__, __TIME__)};
 
@@ -24,15 +24,22 @@ auto main(int argc, char * argv[]) -> int {
         std::print("Invalid input file.");
         return -1;
     }
-    auto in_path{std::filesystem::path(input_file_name)};
-    auto out_path{in_path.parent_path() / in_path.stem()};
-    out_path += ".hpp";
+    auto const in_path{std::filesystem::path(input_file_name)};
+    auto const stem{in_path.stem()};
+    auto const out_path{in_path.parent_path() / stem / ".hpp"};
 
-    auto file{ml::read_file(in_path)};
-    auto result{ccg::compile_file("PLACEHOLDER_MODULE_NAME", file)};
+    auto const file{ml::read_file(in_path)};
+    auto const result{ccg::compile_file("PLACEHOLDER_MODULE_NAME", file)};
     if (!result) {
         std::print("{}\n", result.error().message());
         return -1;
+    }
+
+    if (std::filesystem::exists(out_path)) {
+        auto const existing_out_file{ml::read_file(in_path)};
+        if (existing_out_file == result->file()) {
+            return 0;
+        }
     }
 
     ml::write_file(out_path, result->file());
