@@ -20,8 +20,10 @@ auto CodeGenerator::generate(Module const& mod) -> ErrorOr<CompilerOutput> {
 auto CodeGenerator::generate() -> ErrorOr<void> {
     std::unordered_set<std::string> headers;
     if (mod_.named_arrays().headers().size()) {
+        headers.insert("compare");
         headers.insert("utility");
         headers.insert("array");
+        headers.insert("cstddef");
     }
     std::vector<std::string> sorted_headers;
     sorted_headers.reserve(headers.size());
@@ -71,6 +73,7 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
             }
         }
 
+        // Add iterators
         static constexpr std::array<std::string_view, 8> iter_names{
             {"begin", "end", "cbegin", "cend", "rbegin", "rend", "crbegin", "crend"}};
         output_.file() += "    // Iterators\n";
@@ -82,8 +85,30 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
 )",
                                           in);
         }
-        output_.file() +=
-            std::format("  private:\n    std::array<{}, {}> elems_;\n", field_type_name, n_indexes);
+
+        // Add indexing, comparison, and the data member
+        auto const array_type{std::format("std::array<{}, {}>", field_type_name, n_indexes)};
+
+        output_.file() += std::format(R"(
+    template <typename Self>
+    auto&& operator[](this Self&& self, std::size_t i) {{
+        return std::forward<Self>(self).elems_[i];
+    }}
+    // Comparison
+    auto operator<=>(const {0}&) const = default;
+    auto operator<=>(const {1}& other) const {{
+        return elems_ <=> other;
+    }}
+    bool operator==(const {1}& other) const {{
+        return elems_ == other;
+    }}
+
+
+  private:
+    {1} elems_;
+)",
+                                      name,
+                                      array_type);
 
         output_.file() += "};\n";
     }
