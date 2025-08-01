@@ -47,9 +47,9 @@ auto main(int argc, char* argv[]) -> int {
     }
 
     if (std::filesystem::exists(out_path)) {
-        auto const existing_out_file{ml::read_file(in_path)};
+        auto const existing_out_file{ml::read_file(out_path)};
         if (existing_out_file == result->file()) {
-            std::print("Writing output to {}\n", out_path.string());
+            std::print("{} already exists with the same file contents.\n", out_path.string());
             return 0;
         }
     }
