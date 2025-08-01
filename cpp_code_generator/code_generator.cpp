@@ -91,16 +91,20 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
 
         output_.file() += std::format(R"(
     template <typename Self>
-    auto&& operator[](this Self&& self, std::size_t i) {{
+    auto&& operator[](this Self&& self, std::size_t const i) {{
         return std::forward<Self>(self).elems_[i];
     }}
     // Comparison
-    auto operator<=>(const {0}&) const = default;
-    auto operator<=>(const {1}& other) const {{
-        return elems_ <=> other;
+    auto operator<=>({0} const&) const = default;
+    auto operator==({0} const& other) const {{
+        return elems_ == other.elems_;
     }}
-    bool operator==(const {1}& other) const {{
-        return elems_ == other;
+
+    friend auto operator<=>({0} const& lhs, {1} const& rhs) {{
+        return lhs.elems_ <=> rhs;
+    }}
+    friend bool operator==({0} const& lhs, {1} const& rhs) {{
+        return lhs.elems_ == rhs;
     }}
 
 

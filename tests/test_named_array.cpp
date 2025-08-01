@@ -28,3 +28,17 @@ TEST(named_array, compare_int_array) {
     EXPECT_EQ(foo, is_eq);
     EXPECT_NE(foo, is_ne);
 }
+TEST(named_array, compare_other_instance) {
+    Foo foo{};
+    foo[0] = 0;
+    foo[1] = 1;
+    foo[2] = 2;
+
+    Foo bar{};
+    bar[0] = 2;
+    bar[1] = 1;
+    bar[2] = 0;
+
+    EXPECT_EQ(foo, foo);
+    EXPECT_NE(foo, bar);
+}
