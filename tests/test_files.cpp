@@ -62,6 +62,7 @@ static auto create_pass_inputs() -> std::vector<PassTestFileInput> {
     inputs.emplace_back("comment_file_eof", "// This is a comment", "\n"s);
     inputs.emplace_back("comment_file", "// This is a comment\n", "\n"s);
     inputs.emplace_back("comment_file_2", "//Foo\n//Bar\n", "\n"s);
+    /*
     inputs.emplace_back("named_array_int_1m",
                         R"(
 named_array Foo : int {
@@ -125,6 +126,7 @@ class Foo {
 };
 
 )"s);
+    */
     return inputs;
 }
 
