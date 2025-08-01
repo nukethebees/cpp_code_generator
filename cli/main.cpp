@@ -10,6 +10,7 @@
 #include <ml_cpp_utils/file_io.hpp>
 
 #include "cpp_code_generator/compile_file.hpp"
+#include "cpp_code_generator/file_extension.hpp"
 
 auto main(int argc, char* argv[]) -> int {
     CLI::App app{
@@ -25,8 +26,18 @@ auto main(int argc, char* argv[]) -> int {
         return -1;
     }
     auto const in_path{std::filesystem::path(input_file_name)};
+    if (!in_path.has_extension()) {
+        std::print("Input path has no extension.");
+        return -1;
+    }
+    if (in_path.extension() != ccg::dot_file_extension) {
+        std::print("Input path has no extension.");
+        return -1;
+    }
+
     auto const stem{in_path.stem()};
-    auto const out_path{in_path.parent_path() / stem / ".hpp"};
+    auto out_path{in_path.parent_path() / stem};
+    out_path += ".hpp";
 
     auto const file{ml::read_file(in_path)};
     auto const result{ccg::compile_file("PLACEHOLDER_MODULE_NAME", file)};
@@ -38,10 +49,12 @@ auto main(int argc, char* argv[]) -> int {
     if (std::filesystem::exists(out_path)) {
         auto const existing_out_file{ml::read_file(in_path)};
         if (existing_out_file == result->file()) {
+            std::print("Writing output to {}\n", out_path.string());
             return 0;
         }
     }
 
+    std::print("Writing output to {}\n", out_path.string());
     ml::write_file(out_path, result->file());
 
     return 0;
