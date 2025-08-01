@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 *.cppgen
+tests/test_input.hpp
