@@ -7,6 +7,16 @@
 #include "token_types.hpp"
 
 namespace ccg {
+
+struct TokenRange {
+    TokenIndex offset;
+    std::size_t n;
+
+    constexpr TokenRange(TokenIndex start_, std::size_t n_)
+        : offset{start_}
+        , n{n_} {}
+};
+
 class Tokens {
   public:
     Tokens() = default;
