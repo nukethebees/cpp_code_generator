@@ -13,11 +13,11 @@
 #include "test_input.hpp"
 
 TEST(named_array, default_construct) {
-    Foo const foo{};
+    IntNamedArray const foo{};
     SUCCEED();
 }
 TEST(named_array, compare_int_array) {
-    Foo foo{0, 1, 2};
+    IntNamedArray foo{0, 1, 2};
 
     std::array<int, 3> const is_eq{0, 1, 2};
     std::array<int, 3> const is_ne{2, 1, 0};
@@ -26,8 +26,8 @@ TEST(named_array, compare_int_array) {
     EXPECT_NE(foo, is_ne);
 }
 TEST(named_array, compare_other_instance) {
-    Foo foo{0, 1, 2};
-    Foo bar{2, 1, 0};
+    IntNamedArray foo{0, 1, 2};
+    IntNamedArray bar{2, 1, 0};
 
     EXPECT_EQ(foo, foo);
     EXPECT_NE(foo, bar);
