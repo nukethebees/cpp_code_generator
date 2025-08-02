@@ -28,6 +28,12 @@ class Parser {
     auto make_error(std::string&& msg, ErrorType type) const {
         return std::unexpected(Error(std::move(msg), cur_position(), cur_length(), type));
     }
+    auto make_error_eof() const {
+        return std::unexpected(Error("Unexpected end of file.\n",
+                                     cur_position(),
+                                     cur_length(),
+                                     ErrorType::UNEXPECTED_END_OF_FILE));
+    }
 
     // Token advancement
     void advance() { i++; }
