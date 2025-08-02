@@ -56,16 +56,13 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
         auto field_type_name{mod_.tokens().lexeme(field_type.name())};
         auto n_indexes{header.field_indexes()};
 
-        output_.file() += std::format(R"(  public:
-    // Constructors
-    {0}() = default;
-)",
-                                      name);
-
         if (n_indexes) {
-            output_.file() += std::format(R"(    template <typename... Args>
+            output_.file() += std::format(R"(  public:
+    // Constructors
+    constexpr {0}() = default;
+    template <typename... Args>
         requires ((sizeof...(Args) == {1}) && (std::constructible_from<{2}, Args> && ...))
-    {0}(Args&&... args) 
+    constexpr {0}(Args&&... args) 
         : elems_{{{{std::forward<Args>(args)...}}}}
         {{}}
 )",
@@ -76,7 +73,7 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
             auto indexes{std::span(na.fields()).subspan(header.field_index_start(), n_indexes)};
             auto array_idx{0};
 
-            output_.file() += "    // Accessors\n";
+            output_.file() += "\n    // Accessors\n";
             for (auto index : indexes) {
                 auto field_name{mod_.tokens().lexeme(index.name())};
                 output_.file() += std::format(R"(    template <typename Self>
@@ -88,7 +85,27 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
                                               array_idx);
                 array_idx++;
             }
+        } else {
+            output_.file() += std::format(R"(  public:
+    // Constructors
+    constexpr {0}() = default;
+)",
+                                          name);
         }
+
+        // Capacity
+        output_.file() += R"(
+    // Capacity
+    auto size() const {
+        return elems_.size();
+    }
+    auto empty() const {
+        return elems_.empty();
+    }
+    auto max_size() const {
+        return elems_.max_size();
+    }
+)";
 
         // Add iterators
         static constexpr std::array<std::string_view, 8> iter_names{
@@ -111,6 +128,7 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
     auto&& operator[](this Self&& self, std::size_t const i) {{
         return std::forward<Self>(self).elems_[i];
     }}
+
     // Comparison
     auto operator<=>({0} const&) const = default;
     auto operator==({0} const& other) const {{
@@ -126,7 +144,7 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
 
 
   private:
-    {1} elems_;
+    {1} elems_{{}};
 )",
                                       name,
                                       array_type);
