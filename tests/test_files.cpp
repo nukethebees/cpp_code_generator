@@ -28,6 +28,21 @@ named_array Foo : int {
     fields: foo, bar, baz;
 }
 )");
+    inputs.emplace_back("empty_named_array_with_empty_fields",
+                        R"(
+named_array Foo : int {
+    fields:;
+}
+)");
+    inputs.emplace_back("empty_named_array_with_no_fields_token",
+                        R"(
+named_array Foo : int {}
+)");
+    inputs.emplace_back("two_empty_arrays",
+                        R"(
+named_array Foo : int {}
+named_array Bar : int {}
+)");
 
     return inputs;
 }
