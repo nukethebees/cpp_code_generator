@@ -23,7 +23,7 @@ struct PassTestFileInput {
         , file_input{input_}
         , expected_output{std::move(exp_out)} {}
 };
-inline void PrintTo(PassTestFileInput input, std::ostream* os) {
+inline void PrintTo(PassTestFileInput const& input, std::ostream* os) {
     *os << std::format(R"(Test: {}
 Input:
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
