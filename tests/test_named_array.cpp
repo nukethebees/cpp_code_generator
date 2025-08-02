@@ -35,6 +35,9 @@ TEST(named_array, construct_from_array_move) {
     IntNamedArray const foo{IntNamedArray::ArrayT{1, 2, 3}};
     EXPECT_EQ(foo.size(), 3);
 }
+TEST(named_array, use_accessors) {
+    EXPECT_EQ(int_input.foo() + int_input.bar() + int_input.baz(), 60);
+}
 TEST(named_array, compare_int_array) {
     IntNamedArray foo{0, 1, 2};
 
@@ -54,6 +57,12 @@ TEST(named_array, compare_other_instance) {
 TEST(named_array, indexing) {
     IntNamedArray foo{0, 1, 2};
 
+    EXPECT_EQ(foo[1], 1);
+}
+TEST(named_array, constexpr_int_array) {
+    static constexpr IntNamedArray foo{0, 1, 2};
+    static_assert(foo.size() == 3);
+    static_assert(!foo.empty());
     EXPECT_EQ(foo[1], 1);
 }
 
