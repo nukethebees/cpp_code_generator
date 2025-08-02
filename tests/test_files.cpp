@@ -8,11 +8,6 @@ static auto create_pass_inputs() -> std::vector<PassTestFileInput> {
     std::vector<PassTestFileInput> inputs;
     return inputs;
 }
-
-// INSTANTIATE_TEST_SUITE_P(PassFileTests,
-//                          PassFileTest,
-//                          testing::ValuesIn(create_pass_inputs()),
-//                          [](auto const& info) { return std::string(info.param.test_name); });
 GTEST_ALLOW_UNINSTANTIATED_PARAMETERIZED_TEST(PassFileTest);
 
 static auto create_no_fail_inputs() -> std::vector<NoFailTestFileInput> {
@@ -42,6 +37,13 @@ named_array Foo : int {}
                         R"(
 named_array Foo : int {}
 named_array Bar : int {}
+)");
+
+    inputs.emplace_back("template_type",
+                        R"(
+named_array Foo : Foo[int] {
+    fields: a, b, c;
+}
 )");
 
     return inputs;

@@ -3,8 +3,8 @@
 #include <string_view>
 #include <vector>
 
-#include "types.hpp"
 #include "error.hpp"
+#include "tokens.hpp"
 
 namespace ccg {
 inline auto is_digit(char c) -> bool {

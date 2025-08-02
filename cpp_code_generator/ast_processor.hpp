@@ -1,9 +1,11 @@
 #pragma once
 
-#include "types.hpp"
 #include "error.hpp"
+#include "parser_output.hpp"
 
 namespace ccg {
+class Module;
+
 class AstProcessor {
   private:
     AstProcessor() = delete;

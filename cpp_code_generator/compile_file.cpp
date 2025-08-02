@@ -3,6 +3,7 @@
 #include "ast_processor.hpp"
 #include "code_generator.hpp"
 #include "compile_file.hpp"
+#include "module.hpp"
 #include "parser.hpp"
 #include "scanner.hpp"
 

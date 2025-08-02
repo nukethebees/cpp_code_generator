@@ -1,4 +1,6 @@
 #include "ast_processor.hpp"
+#include "module.hpp"
+#include "named_array.hpp"
 
 #include "result_macros.hpp"
 

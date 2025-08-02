@@ -2,9 +2,10 @@
 
 #include "compiler_output.hpp"
 #include "error.hpp"
-#include "types.hpp"
 
 namespace ccg {
+class Module;
+
 class CodeGenerator {
   private:
     CodeGenerator() = delete;

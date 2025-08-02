@@ -7,6 +7,7 @@
 #include <unordered_set>
 
 #include "code_generator.hpp"
+#include "module.hpp"
 
 #include "result_macros.hpp"
 

@@ -9,7 +9,6 @@
 #include "gtest/gtest.h"
 
 #include "cpp_code_generator/compile_file.hpp"
-#include "cpp_code_generator/types.hpp"
 
 #include "gtest_printing.hpp"
 #include "test_input.hpp"

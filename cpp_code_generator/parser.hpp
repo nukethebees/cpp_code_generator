@@ -4,7 +4,8 @@
 #include <format>
 
 #include "error.hpp"
-#include "types.hpp"
+#include "parser_output.hpp"
+#include "tokens.hpp"
 
 namespace ccg {
 class Parser {
