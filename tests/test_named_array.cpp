@@ -61,9 +61,14 @@ TEST(named_array, indexing) {
 }
 TEST(named_array, constexpr_int_array) {
     static constexpr IntNamedArray foo{0, 1, 2};
+    static constexpr auto sum{int_input.foo() + int_input.bar() + int_input.baz()};
+    static constexpr auto indexed{foo[1]};
+
     static_assert(foo.size() == 3);
     static_assert(!foo.empty());
+
     EXPECT_EQ(foo[1], 1);
+    EXPECT_EQ(sum, 60);
 }
 
 // Iterator tests

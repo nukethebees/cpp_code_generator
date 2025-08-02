@@ -102,7 +102,7 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
             for (auto index : indexes) {
                 auto field_name{mod_.tokens().lexeme(index.name())};
                 output_.file() += std::format(R"(    template <typename Self>
-    auto&& {}(this Self&& self) {{
+    constexpr auto&& {}(this Self&& self) {{
         return std::forward<Self>(self).elems_[{}];
     }}
 )",
@@ -148,7 +148,7 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
         // Add indexing, comparison, and the data member
         output_.file() += std::format(R"(
     template <typename Self>
-    auto&& operator[](this Self&& self, std::size_t const i) {{
+    constexpr auto&& operator[](this Self&& self, std::size_t const i) {{
         return std::forward<Self>(self).elems_[i];
     }}
 
