@@ -28,9 +28,8 @@ auto CodeGenerator::generate() -> ErrorOr<void> {
     }
     std::vector<std::string> sorted_headers;
     sorted_headers.reserve(headers.size());
-
     for (auto& header : headers) {
-        sorted_headers.push_back(std::move(header));
+        sorted_headers.push_back(header);
     }
     std::sort(sorted_headers.begin(), sorted_headers.end());
 
@@ -58,18 +57,22 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
         auto n_indexes{header.field_indexes()};
 
         output_.file() += std::format(R"(  public:
+    // Constructors
     {0}() = default;
-    template <typename... Args>
+)",
+                                      name);
+
+        if (n_indexes) {
+            output_.file() += std::format(R"(    template <typename... Args>
         requires ((sizeof...(Args) == {1}) && (std::constructible_from<{2}, Args> && ...))
     {0}(Args&&... args) 
         : elems_{{{{std::forward<Args>(args)...}}}}
         {{}}
 )",
-                                      name,
-                                      n_indexes,
-                                      field_type_name);
+                                          name,
+                                          n_indexes,
+                                          field_type_name);
 
-        if (n_indexes) {
             auto indexes{std::span(na.fields()).subspan(header.field_index_start(), n_indexes)};
             auto array_idx{0};
 
