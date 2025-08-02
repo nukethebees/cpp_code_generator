@@ -21,8 +21,6 @@ auto Scanner::scan() -> ErrorOr<Tokens> {
     Tokens tokens;
     TokenPosition base{0};
     TokenLength offset{0};
-    std::string buffer;
-    buffer.reserve(255);
 
     auto update_base{[&]() -> void {
         base += offset;
@@ -43,7 +41,6 @@ auto Scanner::scan() -> ErrorOr<Tokens> {
     while (true) {
         using enum TokenType;
 
-        buffer.clear();
         auto c{get_char()};
         offset++;
 
@@ -85,12 +82,11 @@ auto Scanner::scan() -> ErrorOr<Tokens> {
             }
             default: {
                 if (is_identifier_char(c)) {
-                    auto next{peek()};
-                    while (is_inner_identifier_char(next)) {
+                    auto cur{get_char()};
+                    while (is_inner_identifier_char(cur)) {
                         offset++;
-                        next = peek();
+                        cur = get_char();
                     }
-                    offset++;
                     add_token(IDENTIFIER);
                     break;
                 }
