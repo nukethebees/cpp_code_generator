@@ -17,10 +17,7 @@ TEST(named_array, default_construct) {
     SUCCEED();
 }
 TEST(named_array, compare_int_array) {
-    Foo foo{};
-    foo[0] = 0;
-    foo[1] = 1;
-    foo[2] = 2;
+    Foo foo{0, 1, 2};
 
     std::array<int, 3> const is_eq{0, 1, 2};
     std::array<int, 3> const is_ne{2, 1, 0};
@@ -29,15 +26,8 @@ TEST(named_array, compare_int_array) {
     EXPECT_NE(foo, is_ne);
 }
 TEST(named_array, compare_other_instance) {
-    Foo foo{};
-    foo[0] = 0;
-    foo[1] = 1;
-    foo[2] = 2;
-
-    Foo bar{};
-    bar[0] = 2;
-    bar[1] = 1;
-    bar[2] = 0;
+    Foo foo{0, 1, 2};
+    Foo bar{2, 1, 0};
 
     EXPECT_EQ(foo, foo);
     EXPECT_NE(foo, bar);

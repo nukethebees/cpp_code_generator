@@ -24,6 +24,7 @@ auto CodeGenerator::generate() -> ErrorOr<void> {
         headers.insert("utility");
         headers.insert("array");
         headers.insert("cstddef");
+        headers.insert("type_traits");
     }
     std::vector<std::string> sorted_headers;
     sorted_headers.reserve(headers.size());
@@ -53,7 +54,17 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
         auto field_type_name{mod_.tokens().lexeme(field_type.name())};
         auto n_indexes{header.field_indexes()};
 
-        output_.file() += std::format("  public:\n    {}() = default;\n", name);
+        output_.file() += std::format(R"(  public:
+    {0}() = default;
+    template <typename... Args>
+        requires ((sizeof...(Args) == {1}) && (std::constructible_from<{2}, Args> && ...))
+    {0}(Args&&... args) 
+        : elems_{{{{std::forward<Args>(args)...}}}}
+        {{}}
+)",
+                                      name,
+                                      n_indexes,
+                                      field_type_name);
 
         if (n_indexes) {
             auto indexes{std::span(na.fields()).subspan(header.field_index_start(), n_indexes)};
