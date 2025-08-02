@@ -23,6 +23,7 @@ class Parser {
     auto cur_lexeme() const { return tokens_.lexeme(i); }
     auto cur_position() const { return tokens_.source_position(i); }
     auto cur_length() const { return tokens_.length(i); }
+    auto cur_index() const { return i; }
 
     // Errors
     auto make_error(std::string&& msg, ErrorType type) const {
