@@ -5,16 +5,8 @@
 
 #include "gtest_printing.hpp"
 #include "test_passing_file.hpp"
+#include "test_no_fail.hpp"
 
-namespace ccg {
-void PrintTo(CompilerOutput const& output, std::ostream* os) {
-    *os << std::format(R"(Compiler output:
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-{}[END_OF_FILE]
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-)",
-                       output.file());
-}
 void PrintTo(PassTestFileInput const& input, std::ostream* os) {
     *os << std::format(R"(Test: {}
 Input:
@@ -29,5 +21,25 @@ Expected output:
                        input.test_name,
                        input.file_input,
                        input.expected_output.file());
+}
+void PrintTo(NoFailTestFileInput const& input, std::ostream* os) {
+    *os << std::format(R"(Test: {}
+Input:
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+{}[END_OF_FILE]
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+)",
+                       input.test_name,
+                       input.file_input);
+}
+
+namespace ccg {
+void PrintTo(CompilerOutput const & output, std::ostream * os) {
+    *os << std::format(R"(Compiler output:
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+{}[END_OF_FILE]
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+)",
+output.file());
 }
 }

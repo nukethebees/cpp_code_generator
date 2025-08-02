@@ -6,7 +6,7 @@
 #include "gtest_printing.hpp"
 
 TEST_P(NoFailTest, compile_file) {
-    auto const & param{GetParam()};
+    auto const& param{GetParam()};
 
     auto result{ccg::compile_file(param.test_name, param.file_input)};
 

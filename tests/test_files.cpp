@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 
+#include "gtest_printing.hpp"
 #include "test_passing_file.hpp"
 #include "test_no_fail.hpp"
 
@@ -21,7 +22,7 @@ INSTANTIATE_TEST_SUITE_P(PassFileTests,
 static auto create_no_fail_inputs() -> std::vector<NoFailTestFileInput> {
     std::vector<NoFailTestFileInput> inputs;
 
-    inputs.emplace_back("named_array_int_1m",
+    inputs.emplace_back("named_array_int",
                         R"(
 named_array Foo : int {
     fields: foo, bar, baz;
