@@ -11,7 +11,7 @@ set(GENERATED_HEADER "${CMAKE_CURRENT_BINARY_DIR}/tests/test_input.hpp")
 # Custom command to run cpp_code_generator.exe
 add_custom_command(
     OUTPUT ${GENERATED_HEADER}
-    COMMAND $<TARGET_FILE:cli> ${INPUT_FILE}
+    COMMAND $<TARGET_FILE:cli> ${INPUT_FILE} "--silent_on_success"
     DEPENDS cpp_code_generator ${INPUT_FILE}
     COMMENT "Running cpp_code_generator.exe to generate test_input.hpp"
 )

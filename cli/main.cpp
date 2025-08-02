@@ -19,6 +19,11 @@ auto main(int argc, char* argv[]) -> int {
     std::string input_file_name{""};
     app.add_option("input_filename", input_file_name, "The input file path")->required();
 
+    bool silent_on_success{false};
+    app.add_flag("--silent_on_success",
+                 silent_on_success,
+                 "Suppress printing to the console if no errors occur.");
+
     CLI11_PARSE(app, argc, argv);
 
     if (!std::filesystem::exists(input_file_name)) {
@@ -49,12 +54,18 @@ auto main(int argc, char* argv[]) -> int {
     if (std::filesystem::exists(out_path)) {
         auto const existing_out_file{ml::read_file(out_path)};
         if (existing_out_file == result->file()) {
-            std::print("{} already exists with the same file contents.\n", out_path.string());
+            if (!silent_on_success) {
+                std::print("{} already exists with the same file contents.\n", out_path.string());
+            }
+
             return 0;
         }
     }
 
-    std::print("Writing output to {}\n", out_path.string());
+    if (!silent_on_success) {
+        std::print("Writing output to {}\n", out_path.string());
+    }
+
     ml::write_file(out_path, result->file());
 
     return 0;
