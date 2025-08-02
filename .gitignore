@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 *.cppgen
 tests/test_input.hpp
+tests/*Test.txt

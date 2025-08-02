@@ -3,6 +3,8 @@
 #include "gtest/gtest.h"
 #include "cpp_code_generator/compiler_output.hpp"
 
+#include "file_test.hpp"
+
 using namespace std::string_literals;
 
 struct PassTestFileInput {
@@ -17,4 +19,4 @@ struct PassTestFileInput {
         , expected_output{std::move(exp_out)} {}
 };
 
-class PassFileTest : public testing::TestWithParam<PassTestFileInput> {};
+using PassFileTest = FileTest<PassTestFileInput>;

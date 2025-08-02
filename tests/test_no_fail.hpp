@@ -5,6 +5,7 @@
 #include "gtest/gtest.h"
 
 #include "gtest_printing.hpp"
+#include "file_test.hpp"
 
 using namespace std::string_literals;
 
@@ -16,4 +17,4 @@ struct NoFailTestFileInput {
         , file_input{input_} {}
 };
 
-class NoFailTest : public testing::TestWithParam<NoFailTestFileInput> {};
+using NoFailTest = FileTest<NoFailTestFileInput>;

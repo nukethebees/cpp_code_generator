@@ -6,6 +6,7 @@
 #include "gtest_printing.hpp"
 
 TEST_P(PassFileTest, compile_file) {
+    init_file_if_null(::testing::UnitTest::GetInstance());
     auto const& param{GetParam()};
 
 #if 0
