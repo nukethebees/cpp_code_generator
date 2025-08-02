@@ -2,6 +2,7 @@
 #include <array>
 #include <format>
 #include <ostream>
+#include <stdexcept>
 #include <string_view>
 #include <vector>
 
@@ -63,12 +64,17 @@ TEST(named_array, constexpr_int_array) {
     static constexpr IntNamedArray foo{0, 1, 2};
     static constexpr auto sum{int_input.foo() + int_input.bar() + int_input.baz()};
     static constexpr auto indexed{foo[1]};
+    static constexpr auto got{foo.get<0>()};
 
     static_assert(foo.size() == 3);
     static_assert(!foo.empty());
 
-    EXPECT_EQ(foo[1], 1);
+    EXPECT_EQ(indexed, 1);
+    EXPECT_EQ(got, 0);
+    EXPECT_EQ(foo.at(2), 2);
     EXPECT_EQ(sum, 60);
+
+    EXPECT_THROW(foo.at(4), std::out_of_range);
 }
 
 // Iterator tests
