@@ -18,13 +18,13 @@ static constexpr IntNamedArray int_input{10, 20, 30};
 // Empty array
 TEST(named_array, construct_empty) {
     EmptyIntNamedArray const foo{};
-    SUCCEED();
+    EXPECT_EQ(foo.size(), 0);
 }
 
 // Int array
 TEST(named_array, default_construct) {
     IntNamedArray const foo{};
-    SUCCEED();
+    EXPECT_EQ(foo.size(), 3);
 }
 TEST(named_array, compare_int_array) {
     IntNamedArray foo{0, 1, 2};
