@@ -8,6 +8,8 @@ add_subdirectory("cli")
 set(INPUT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/tests/test_input.cppg")
 set(GENERATED_HEADER "${CMAKE_CURRENT_BINARY_DIR}/tests/test_input.hpp")
 
+set(RUN_AUTOGEN ON)
+
 # Custom command to run cpp_code_generator.exe
 add_custom_command(
     OUTPUT ${GENERATED_HEADER}
@@ -18,7 +20,9 @@ add_custom_command(
 add_custom_target(run_codegen DEPENDS ${GENERATED_HEADER})
 
 add_subdirectory("tests")
-add_dependencies(tests run_codegen)
+if(RUN_AUTOGEN)
+    add_dependencies(tests run_codegen)
+endif()
 
 add_subdirectory("readmegen")
 add_custom_command(
@@ -31,4 +35,6 @@ add_custom_command(
 
 add_custom_target(generate_readme DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/README.md")
 # Force the README generator to run
-add_dependencies(tests generate_readme)
+if(RUN_AUTOGEN)
+    add_dependencies(tests generate_readme)
+endif()
