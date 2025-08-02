@@ -12,14 +12,14 @@ enum class ErrorType : uint8_t {
     COMPILER_BUG,
     PLACEHOLDER,
     UNEXPECTED_PARSER_TOKEN,
-    UNEXPECTED_SCANNER_TOKEN
+    UNEXPECTED_SCANNER_TOKEN,
+    UNEXPECTED_END_OF_FILE,
 };
 
-
 class Error {
-public:
+  public:
     Error() = delete;
-    Error(std::string const & message,
+    Error(std::string const& message,
           TokenPosition source_position,
           TokenLength source_length,
           ErrorType type)
@@ -30,24 +30,24 @@ public:
 
     // Member Access
     template <typename Self>
-    auto && message(this Self && self) {
+    auto&& message(this Self&& self) {
         return std::forward<Self>(self).message_;
     }
     template <typename Self>
-    auto && source_position(this Self && self) {
+    auto&& source_position(this Self&& self) {
         return std::forward<Self>(self).source_position_;
     }
     template <typename Self>
-    auto && source_length(this Self && self) {
+    auto&& source_length(this Self&& self) {
         return std::forward<Self>(self).source_length_;
     }
     template <typename Self>
-    auto && type(this Self && self) {
+    auto&& type(this Self&& self) {
         return std::forward<Self>(self).type_;
     }
 
     static auto placeholder_error() { return Error("Placeholder", 0, 0, ErrorType::PLACEHOLDER); }
-private:
+  private:
     std::string message_;
     TokenPosition source_position_;
     TokenLength source_length_;
