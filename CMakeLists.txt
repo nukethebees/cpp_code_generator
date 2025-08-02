@@ -19,3 +19,16 @@ add_custom_target(run_codegen DEPENDS ${GENERATED_HEADER})
 
 add_subdirectory("tests")
 add_dependencies(tests run_codegen)
+
+add_subdirectory("readmegen")
+add_custom_command(
+    OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/README.md"
+    COMMAND $<TARGET_FILE:readmegen>
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    DEPENDS readmegen
+    COMMENT "Running README generation."
+)
+
+add_custom_target(generate_readme DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/README.md")
+# Force the README generator to run
+add_dependencies(tests generate_readme)
