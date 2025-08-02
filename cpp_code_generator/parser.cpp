@@ -13,7 +13,10 @@ auto Parser::parse(Tokens const& tokens) -> ErrorOr<ParserOutput> {
 }
 
 auto Parser::parse() -> ErrorOr<void> {
-    return module_item();
+    while (!is_eof()) {
+        TRY(module_item());
+    }
+    return {};
 }
 auto Parser::module_item() -> ErrorOr<void> {
     auto type{cur_type()};
@@ -61,21 +64,22 @@ auto Parser::named_array() -> ErrorOr<void> {
     TRY_ASSIGN(type, consume_index(TokenType::IDENTIFIER));
     TRY(consume(TokenType::LEFT_BRACE));
 
-    TRY(consume("fields"));
-    TRY(consume(TokenType::COLON));
-
     std::vector<TokenIndex> field_indexes;
-    bool first{true};
-    while (!match(TokenType::SEMICOLON)) {
-        if (!first) {
-            TRY(consume(TokenType::COMMA));
-        }
-        first = false;
-        TRY_ASSIGN(field_name, consume_index(TokenType::IDENTIFIER));
-        field_indexes.push_back(*field_name);
-    }
-    TRY(consume(TokenType::RIGHT_BRACE));
+    if (match(TokenType::IDENTIFIER, "fields")) {
+        TRY(consume(TokenType::COLON));
 
+        bool first{true};
+        while (!match(TokenType::SEMICOLON)) {
+            if (!first) {
+                TRY(consume(TokenType::COMMA));
+            }
+            first = false;
+            TRY_ASSIGN(field_name, consume_index(TokenType::IDENTIFIER));
+            field_indexes.push_back(*field_name);
+        }
+    }
+
+    TRY(consume(TokenType::RIGHT_BRACE));
     output.named_arrays().emplace_back(*name, *type, std::move(field_indexes));
 
     return {};

@@ -68,6 +68,22 @@ class Parser {
         }
         return false;
     }
+    auto match(std::string_view str) -> bool {
+        if (cur_lexeme() == str) {
+            advance();
+            return true;
+        }
+        return false;
+    }
+    auto match(TokenType type, std::string_view str) -> bool {
+        if ((cur_type() == type) && (cur_lexeme() == str)) {
+            advance();
+            return true;
+        }
+        return false;
+    }
+
+    auto is_eof() const { return cur_type() == TokenType::END_OF_FILE; }
   public:
     static auto parse(Tokens const& tokens) -> ErrorOr<ParserOutput>;
   private:
