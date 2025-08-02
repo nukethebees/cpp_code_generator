@@ -60,9 +60,24 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
 
         output_.file() += "  public:\n";
         output_.file() += std::format("    using ArrayT = {};\n", array_type);
+        output_.file() += R"(    
+    // ArrayT typedefs
+    using value_type = typename ArrayT::value_type;
+    using size_type = typename ArrayT::size_type;
+    using difference_type = typename ArrayT::difference_type;
+    using reference = typename ArrayT::reference;
+    using const_reference = typename ArrayT::const_reference;
+    using pointer = typename ArrayT::pointer;
+    using const_pointer = typename ArrayT::const_pointer;
+    using iterator = typename ArrayT::iterator;
+    using const_iterator = typename ArrayT::const_iterator;
+    using reverse_iterator = typename ArrayT::reverse_iterator;
+    using const_reverse_iterator = typename ArrayT::const_reverse_iterator;
+)";
 
         if (n_indexes) {
-            output_.file() += std::format(R"(    // Constructors
+            output_.file() += std::format(R"(    
+    // Constructors
     constexpr {0}() = default;
     template <typename... Args>
         requires ((sizeof...(Args) == {1}) && (std::constructible_from<{2}, Args> && ...))
