@@ -106,13 +106,13 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
         // Capacity
         output_.file() += R"(
     // Capacity
-    auto size() const {
+    constexpr auto size() const {
         return elems_.size();
     }
-    auto empty() const {
+    constexpr auto empty() const {
         return elems_.empty();
     }
-    auto max_size() const {
+    constexpr auto max_size() const {
         return elems_.max_size();
     }
 )";
