@@ -33,6 +33,9 @@ auto CodeGenerator::generate() -> ErrorOr<void> {
         sorted_headers.push_back(std::move(header));
     }
     std::sort(sorted_headers.begin(), sorted_headers.end());
+
+    output_.file() += "#pragma once\n\n";
+
     for (auto const& header : sorted_headers) {
         output_.file() += std::format("#include <{}>\n", header);
     }
