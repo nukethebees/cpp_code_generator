@@ -1,15 +1,10 @@
-#include <format>
 #include <ostream>
 
-#include "cpp_code_generator/types.hpp"
+struct PassTestFileInput;
 
 namespace ccg {
-inline void PrintTo(CompilerOutput output, std::ostream* os) {
-    *os << std::format(R"(Compiler output:
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-{}[END_OF_FILE]
-<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-)",
-                       output.file());
-}
+class CompilerOutput;
+
+void PrintTo(CompilerOutput const & output, std::ostream * os);
+void PrintTo(PassTestFileInput const & output, std::ostream * os);
 }
