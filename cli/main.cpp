@@ -45,7 +45,7 @@ auto main(int argc, char* argv[]) -> int {
     out_path += ".hpp";
 
     auto const file{ml::read_file(in_path)};
-    auto const result{ccg::compile_file("PLACEHOLDER_MODULE_NAME", file)};
+    auto const result{ccg::compile_file(stem.string(), file)};
     if (!result) {
         std::print("{}\n", result.error().message());
         return -1;
