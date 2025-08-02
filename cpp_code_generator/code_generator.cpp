@@ -56,14 +56,24 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
         auto field_type_name{mod_.tokens().lexeme(field_type.name())};
         auto n_indexes{header.field_indexes()};
 
+        auto const array_type{std::format("std::array<{}, {}>", field_type_name, n_indexes)};
+
+        output_.file() += "  public:\n";
+        output_.file() += std::format("    using ArrayT = {};\n", array_type);
+
         if (n_indexes) {
-            output_.file() += std::format(R"(  public:
-    // Constructors
+            output_.file() += std::format(R"(    // Constructors
     constexpr {0}() = default;
     template <typename... Args>
         requires ((sizeof...(Args) == {1}) && (std::constructible_from<{2}, Args> && ...))
     constexpr {0}(Args&&... args) 
         : elems_{{{{std::forward<Args>(args)...}}}}
+        {{}}
+    explicit constexpr {0}(ArrayT&& arr) 
+        : elems_{{std::move(arr)}}
+        {{}}
+    explicit constexpr {0}(ArrayT const& arr) 
+        : elems_{{arr}}
         {{}}
 )",
                                           name,
@@ -121,8 +131,6 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
         }
 
         // Add indexing, comparison, and the data member
-        auto const array_type{std::format("std::array<{}, {}>", field_type_name, n_indexes)};
-
         output_.file() += std::format(R"(
     template <typename Self>
     auto&& operator[](this Self&& self, std::size_t const i) {{
@@ -147,7 +155,7 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
     {1} elems_{{}};
 )",
                                       name,
-                                      array_type);
+                                      "ArrayT");
 
         output_.file() += "};\n";
     }

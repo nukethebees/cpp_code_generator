@@ -26,6 +26,15 @@ TEST(named_array, default_construct) {
     IntNamedArray const foo{};
     EXPECT_EQ(foo.size(), 3);
 }
+TEST(named_array, construct_from_array_copy) {
+    IntNamedArray::ArrayT ip;
+    IntNamedArray const foo{ip};
+    EXPECT_EQ(foo.size(), 3);
+}
+TEST(named_array, construct_from_array_move) {
+    IntNamedArray const foo{IntNamedArray::ArrayT{1, 2, 3}};
+    EXPECT_EQ(foo.size(), 3);
+}
 TEST(named_array, compare_int_array) {
     IntNamedArray foo{0, 1, 2};
 
