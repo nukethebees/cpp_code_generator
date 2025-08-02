@@ -5,8 +5,8 @@
 #include <vector>
 
 #include "token_types.hpp"
-#include "string_hasher.hpp"
 #include "tokens.hpp"
+#include "hashed_string_containers.hpp"
 
 namespace ccg {
 using TypeIndex = uint32_t;

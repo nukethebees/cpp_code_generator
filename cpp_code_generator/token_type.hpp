@@ -6,7 +6,7 @@
 #include <string_view>
 #include <optional>
 
-#include "string_hasher.hpp"
+#include "hashed_string_containers.hpp"
 
 enum class TokenType : uint8_t {
     // Numeric Operators
@@ -282,9 +282,7 @@ inline std::string token_string(TokenType type) {
 }
 
 inline std::optional<TokenType> module_keyword_lookup(std::string_view str) {
-    static const ccg::StringMap<TokenType> keyword_map = {
-        {"named_array", TokenType::NAMED_ARRAY}
-    };
+    static ccg::StringMap<TokenType> const keyword_map = {{"named_array", TokenType::NAMED_ARRAY}};
     auto it = keyword_map.find(str);
     if (it != keyword_map.end()) {
         return it->second;
