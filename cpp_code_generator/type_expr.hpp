@@ -8,5 +8,7 @@ class ParsedTypeExpr {
   public:
     explicit ParsedTypeExpr(TokenRange tokens)
         : tokens_{tokens} {}
+
+    auto const& tokens() const { return tokens_; }
 };
 }

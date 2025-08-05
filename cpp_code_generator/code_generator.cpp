@@ -8,6 +8,8 @@
 
 #include "code_generator.hpp"
 #include "module.hpp"
+#include "tokens.hpp"
+#include "type_expr.hpp"
 
 #include "result_macros.hpp"
 
@@ -189,6 +191,20 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
 
         output_.file() += "};\n";
     }
+    return {};
+}
+
+auto CodeGenerator::type_expr(ParsedTypeExpr const& expr) -> ErrorOr<void> {
+    return token_range(expr.tokens());
+}
+auto CodeGenerator::token_range(TokenRange const& expr) -> ErrorOr<void> {
+    auto const start{expr.offset};
+    auto const end{start + expr.n};
+
+    for (auto i{expr.offset}; i < end; ++i) {
+        output_.file() += this->mod_.tokens().lexeme(i);
+    }
+
     return {};
 }
 }
