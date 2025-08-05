@@ -19,6 +19,7 @@ target_sources(cpp_code_generator PUBLIC
   "parser.hpp"
   "token_type.hpp"
   "result_macros.hpp"
+  "type_expr.hpp"
 )
 
 target_link_libraries(cpp_code_generator 

@@ -65,6 +65,8 @@ auto Scanner::scan() -> ErrorOr<Tokens> {
                 TOKEN_CASE(']', RIGHT_BRACKET)
                 TOKEN_CASE('(', LEFT_PAREN)
                 TOKEN_CASE(')', RIGHT_PAREN)
+                TOKEN_CASE('>', GREATER)
+                TOKEN_CASE('<', LESS)
                 TOKEN_CASE('{', LEFT_BRACE)
                 TOKEN_CASE('}', RIGHT_BRACE)
                 TOKEN_CASE(',', COMMA)

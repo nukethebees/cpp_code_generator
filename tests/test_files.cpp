@@ -41,7 +41,7 @@ named_array Bar : int {}
 
     inputs.emplace_back("template_type",
                         R"(
-named_array Foo : Foo[int] {
+named_array Foo : Bar<int> {
     fields: a, b, c;
 }
 )");

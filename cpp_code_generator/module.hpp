@@ -4,7 +4,6 @@
 #include <utility>
 
 #include "tokens.hpp"
-#include "ast_type.hpp"
 #include "tagged_union.hpp"
 #include "named_array.hpp"
 
@@ -32,14 +31,9 @@ class Module {
     auto&& named_arrays(this Self&& self) {
         return std::forward<Self>(self).named_arrays_;
     }
-    template <typename Self>
-    auto&& types(this Self&& self) {
-        return std::forward<Self>(self).types_;
-    }
   private:
     std::string_view name_;
     Tokens tokens_;
-    Types types_;
     TaggedUnions unions_;
     NamedArrays named_arrays_;
 };

@@ -15,13 +15,10 @@ auto AstProcessor::process() -> ErrorOr<void> {
     return {};
 }
 auto AstProcessor::named_arrays() -> ErrorOr<void> {
-    auto const& tokens{mod_.tokens()};
-
     auto& nas{mod_.named_arrays()};
 
     for (auto const& na : parser_output_.named_arrays()) {
         auto type_token{na.type()};
-        auto type_index{mod_.types().lookup_or_add(tokens, type_token)};
 
         auto index_start{nas.fields().size()};
         auto const& field_indexes{na.field_indexes()};
@@ -30,7 +27,7 @@ auto AstProcessor::named_arrays() -> ErrorOr<void> {
         }
 
         nas.headers().emplace_back(na.name(),
-                                   type_index,
+                                   na.type(),
                                    static_cast<NamedArrayFieldIndex>(index_start),
                                    static_cast<NamedArrayFieldIndex>(field_indexes.size()));
     }

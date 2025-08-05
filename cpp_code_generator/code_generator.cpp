@@ -51,12 +51,12 @@ auto CodeGenerator::generate() -> ErrorOr<void> {
 }
 auto CodeGenerator::named_arrays() -> ErrorOr<void> {
     auto const& na{mod_.named_arrays()};
+
     for (auto const& header : na.headers()) {
         auto name{mod_.tokens().lexeme(header.name())};
         output_.file() += std::format("class {} {{\n", name);
 
-        auto const& field_type{mod_.types().types()[header.type_index()]};
-        auto field_type_name{mod_.tokens().lexeme(field_type.name())};
+        auto field_type_name{this->type_expr(header.type_index())};
         auto n_indexes{header.field_indexes()};
 
         auto const array_type{std::format("std::array<{}, {}>", field_type_name, n_indexes)};
@@ -194,17 +194,18 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
     return {};
 }
 
-auto CodeGenerator::type_expr(ParsedTypeExpr const& expr) -> ErrorOr<void> {
+auto CodeGenerator::type_expr(ParsedTypeExpr const& expr) -> std::string {
     return token_range(expr.tokens());
 }
-auto CodeGenerator::token_range(TokenRange const& expr) -> ErrorOr<void> {
+auto CodeGenerator::token_range(TokenRange const& expr) -> std::string {
     auto const start{expr.offset};
     auto const end{start + expr.n};
 
+    std::string out;
     for (auto i{expr.offset}; i < end; ++i) {
-        output_.file() += this->mod_.tokens().lexeme(i);
+        out += this->mod_.tokens().lexeme(i);
     }
 
-    return {};
+    return out;
 }
 }

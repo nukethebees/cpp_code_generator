@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <array>
+#include <compare>
 #include <format>
 #include <ostream>
 #include <stdexcept>
@@ -9,6 +10,13 @@
 #include "gtest/gtest.h"
 
 #include "cpp_code_generator/compile_file.hpp"
+
+template <typename T>
+struct Tmp {
+    T value;
+
+    auto operator<=>(Tmp const&) const = default;
+};
 
 #include "gtest_printing.hpp"
 #include "test_input.hpp"
@@ -157,4 +165,10 @@ TEST(named_array, algorithm_count) {
     auto count_99 = static_cast<int>(std::count(int_input.begin(), int_input.end(), 99));
     EXPECT_EQ(count_10, 1);
     EXPECT_EQ(count_99, 0);
+}
+
+// Template type
+TEST(named_array, tmp_named_array_construction) {
+    TmpNamedArray foo{};
+    SUCCEED();
 }

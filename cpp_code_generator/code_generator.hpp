@@ -17,8 +17,8 @@ class CodeGenerator {
     auto generate() -> ErrorOr<void>;
     auto named_arrays() -> ErrorOr<void>;
 
-    auto type_expr(ParsedTypeExpr const& expr) -> ErrorOr<void>;
-    auto token_range(TokenRange const& expr) -> ErrorOr<void>;
+    auto type_expr(ParsedTypeExpr const& expr) -> std::string;
+    auto token_range(TokenRange const& expr) -> std::string;
   public:
     static auto generate(Module const& mod) -> ErrorOr<CompilerOutput>;
     template <typename Self>

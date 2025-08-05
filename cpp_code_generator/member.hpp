@@ -1,13 +1,13 @@
 #pragma once
 
 #include "token_types.hpp"
-#include "ast_type.hpp"
+#include "type_expr.hpp"
 
 namespace ccg {
 class Member {
   public:
     Member() = delete;
-    Member(TokenIndex name, Type const& type)
+    Member(TokenIndex name, ParsedTypeExpr const& type)
         : name_(name)
         , type_(type) {}
 
@@ -22,6 +22,6 @@ class Member {
     }
   private:
     TokenIndex name_;
-    Type type_;
+    ParsedTypeExpr type_;
 };
 }

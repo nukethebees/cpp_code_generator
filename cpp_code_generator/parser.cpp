@@ -60,7 +60,7 @@ auto Parser::module_item() -> ErrorOr<void> {
 auto Parser::named_array() -> ErrorOr<void> {
     TRY_ASSIGN(name, consume_index(TokenType::IDENTIFIER));
     TRY(consume(TokenType::COLON));
-    TRY_ASSIGN(type, consume_index(TokenType::IDENTIFIER));
+    TRY_ASSIGN(type, type_expr());
     TRY(consume(TokenType::LEFT_BRACE));
 
     std::vector<TokenIndex> field_indexes;
@@ -93,23 +93,20 @@ auto Parser::type_expr() -> ErrorOr<ParsedTypeExpr> {
         end_idx = *type_expr_idx;
     }
 
-    return ParsedTypeExpr(TokenRange(*type, end_idx - *type));
+    return ParsedTypeExpr(TokenRange(*type, 1 + end_idx - *type));
 }
 auto Parser::type_expr_args() -> ErrorOr<TokenIndex> {
     using enum TokenType;
-
-    auto end_idx{cur_index()};
 
     bool first{true};
     while (!match(GREATER)) {
         if (!first) {
             TRY(consume(COMMA));
         }
-        TRY_ASSIGN(identifier_idx, consume_index(IDENTIFIER));
-        end_idx = *identifier_idx;
+        TRY(consume(IDENTIFIER));
         first = false;
     }
 
-    return end_idx;
+    return cur_index() - 1;
 }
 }

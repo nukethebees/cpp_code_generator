@@ -3,3 +3,7 @@ named_array IntNamedArray : int {
 }
 
 named_array EmptyIntNamedArray : int {}
+
+named_array TmpNamedArray : Tmp<int> {
+    fields: foo, bar, baz;
+}

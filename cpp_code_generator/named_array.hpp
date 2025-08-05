@@ -4,13 +4,13 @@
 #include <utility>
 
 #include "token_types.hpp"
-#include "ast_type.hpp"
+#include "type_expr.hpp"
 
 namespace ccg {
 class ParsedNamedArray {
   public:
     ParsedNamedArray() = default;
-    ParsedNamedArray(TokenIndex name, TokenIndex type, std::vector<TokenIndex>&& field_indexes)
+    ParsedNamedArray(TokenIndex name, ParsedTypeExpr type, std::vector<TokenIndex>&& field_indexes)
         : name_{name}
         , type_{type}
         , field_indexes_{std::move(field_indexes)} {}
@@ -29,7 +29,7 @@ class ParsedNamedArray {
     }
   private:
     TokenIndex name_;
-    TokenIndex type_;
+    ParsedTypeExpr type_;
     std::vector<TokenIndex> field_indexes_;
 };
 
@@ -38,7 +38,7 @@ class NamedArrayHeader {
   public:
     NamedArrayHeader() = delete;
     NamedArrayHeader(TokenIndex name,
-                     TypeIndex type_index,
+                     ParsedTypeExpr type_index,
                      NamedArrayFieldIndex field_index_start,
                      NamedArrayFieldIndex field_indexes)
         : name_(name)
@@ -65,7 +65,7 @@ class NamedArrayHeader {
     }
   private:
     TokenIndex name_;
-    TypeIndex type_index_;
+    ParsedTypeExpr type_index_;
     NamedArrayFieldIndex field_index_start_;
     NamedArrayFieldIndex field_indexes_;
 };
