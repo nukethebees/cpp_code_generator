@@ -5,7 +5,7 @@
 
 #include "gtest/gtest.h"
 
-auto get_test_out_file_path(::testing::UnitTest const* inst) -> std::string;
+#include "misc.hpp"
 
 template <typename T>
 class FileTest : public testing::TestWithParam<T> {

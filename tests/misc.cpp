@@ -1,10 +1,10 @@
-#include "testf_file_test.hpp"
+#include "misc.hpp"
 
-auto get_test_out_file_path(::testing::UnitTest const* inst) -> std::string {
+auto get_test_out_file_path(::testing::UnitTest const * inst) -> std::string {
     auto const case_name{inst->current_test_case()->name()};
 
     auto out_path{std::format("{}.txt", case_name)};
-    for (auto& c : out_path) {
+    for (auto & c : out_path) {
         if (c == '/') {
             c = '_';
         }
