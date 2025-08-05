@@ -12,7 +12,7 @@
         },
         {
             "kind": "git",
-            "baseline": "55df908e34ebb90aa29060da374e67cbdd003f88",
+            "baseline": "fdc5b5916cf7d23f8940e39744313667ef730ac3",
             "reference": "HEAD",
             "repository": "https://github.com/nukethebees/vcpkg-registry",
             "packages": [

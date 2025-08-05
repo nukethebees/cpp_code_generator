@@ -2,6 +2,8 @@
 #include <string>
 #include <string_view>
 
+#include <ml_cpp_utils/text.hpp>
+
 #include "scanner.hpp"
 #include "token_type.hpp"
 
@@ -81,9 +83,9 @@ auto Scanner::scan() -> ErrorOr<Tokens> {
                 goto end;
             }
             default: {
-                if (is_identifier_char(c)) {
+                if (ml::is_identifier_char(c)) {
                     auto cur{get_char()};
-                    while (is_inner_identifier_char(cur)) {
+                    while (ml::is_inner_identifier_char(cur)) {
                         offset++;
                         cur = get_char();
                     }
