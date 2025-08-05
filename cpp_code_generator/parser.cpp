@@ -57,7 +57,6 @@ auto Parser::module_item() -> ErrorOr<void> {
 
     return {};
 }
-
 auto Parser::named_array() -> ErrorOr<void> {
     TRY_ASSIGN(name, consume_index(TokenType::IDENTIFIER));
     TRY(consume(TokenType::COLON));
@@ -83,5 +82,34 @@ auto Parser::named_array() -> ErrorOr<void> {
     output.named_arrays().emplace_back(*name, *type, std::move(field_indexes));
 
     return {};
+}
+
+auto Parser::type_expr() -> ErrorOr<ParsedTypeExpr> {
+    TRY_ASSIGN(type, consume_index(TokenType::IDENTIFIER));
+    auto end_idx{*type};
+
+    if (match(TokenType::LESS)) {
+        TRY_ASSIGN(type_expr_idx, type_expr_args());
+        end_idx = *type_expr_idx;
+    }
+
+    return ParsedTypeExpr(TokenRange(*type, end_idx - *type));
+}
+auto Parser::type_expr_args() -> ErrorOr<TokenIndex> {
+    using enum TokenType;
+
+    auto end_idx{cur_index()};
+
+    bool first{true};
+    while (!match(GREATER)) {
+        if (!first) {
+            TRY(consume(COMMA));
+        }
+        TRY_ASSIGN(identifier_idx, consume_index(IDENTIFIER));
+        end_idx = *identifier_idx;
+        first = false;
+    }
+
+    return end_idx;
 }
 }

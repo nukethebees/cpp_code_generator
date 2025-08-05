@@ -6,6 +6,7 @@
 #include "error.hpp"
 #include "parser_output.hpp"
 #include "tokens.hpp"
+#include "type_expr.hpp"
 
 namespace ccg {
 class Parser {
@@ -17,6 +18,9 @@ class Parser {
     auto parse() -> ErrorOr<void>;
     auto module_item() -> ErrorOr<void>;
     auto named_array() -> ErrorOr<void>;
+
+    auto type_expr() -> ErrorOr<ParsedTypeExpr>;
+    auto type_expr_args() -> ErrorOr<TokenIndex>;
 
     // Token access
     auto cur_type() const { return tokens_.type(i); }
