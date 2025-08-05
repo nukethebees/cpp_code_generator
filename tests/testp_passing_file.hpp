@@ -3,7 +3,7 @@
 #include "gtest/gtest.h"
 #include "cpp_code_generator/compiler_output.hpp"
 
-#include "file_test.hpp"
+#include "testf_file_test.hpp"
 
 using namespace std::string_literals;
 

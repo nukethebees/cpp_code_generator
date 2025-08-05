@@ -2,7 +2,7 @@
 
 #include "cpp_code_generator/compile_file.hpp"
 
-#include "test_passing_file.hpp"
+#include "testp_passing_file.hpp"
 #include "gtest_printing.hpp"
 
 TEST_P(PassFileTest, compile_file) {

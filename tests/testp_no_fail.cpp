@@ -2,7 +2,7 @@
 
 #include "cpp_code_generator/compile_file.hpp"
 
-#include "test_no_fail.hpp"
+#include "testp_no_fail.hpp"
 #include "gtest_printing.hpp"
 
 using namespace std::string_view_literals;

@@ -1,13 +1,18 @@
 find_package(GTest CONFIG REQUIRED)
 
 add_executable(tests
+    # Helpers
+    "gtest_printing.cpp" 
+    
+    # Test fixtures / parameterised tests
+    "testp_passing_file.cpp" 
+    "testp_no_fail.cpp" 
+    "testf_file_test.cpp"
+    
+    # Test definitions
     "test_files.cpp"
     "test_input.hpp"
-    "test_named_array.cpp"
-    "gtest_printing.cpp" 
-    "test_passing_file.cpp" 
-    "test_no_fail.cpp" 
-    "file_test.cpp"
+    "test_named_array.cpp"   
 )
 target_link_libraries(tests PRIVATE 
     GTest::gtest_main cpp_code_generator

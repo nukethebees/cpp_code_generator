@@ -1,8 +1,8 @@
 #include "gtest/gtest.h"
 
 #include "gtest_printing.hpp"
-#include "test_passing_file.hpp"
-#include "test_no_fail.hpp"
+#include "testp_passing_file.hpp"
+#include "testp_no_fail.hpp"
 
 static auto create_pass_inputs() -> std::vector<PassTestFileInput> {
     std::vector<PassTestFileInput> inputs;

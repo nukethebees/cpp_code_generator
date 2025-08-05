@@ -4,8 +4,8 @@
 #include "cpp_code_generator/compiler_output.hpp"
 
 #include "gtest_printing.hpp"
-#include "test_passing_file.hpp"
-#include "test_no_fail.hpp"
+#include "testp_passing_file.hpp"
+#include "testp_no_fail.hpp"
 
 void PrintTo(PassTestFileInput const& input, std::ostream* os) {
     *os << std::format(R"(Test: {}
