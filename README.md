@@ -24,6 +24,7 @@ named_array IntNamedArray : int {
 #include <array>
 #include <compare>
 #include <cstddef>
+#include <cstdint>
 #include <type_traits>
 #include <utility>
 
@@ -43,6 +44,12 @@ class IntNamedArray {
     using const_iterator = typename ArrayT::const_iterator;
     using reverse_iterator = typename ArrayT::reverse_iterator;
     using const_reverse_iterator = typename ArrayT::const_reverse_iterator;
+
+    enum class Field : uint8_t {
+        foo,
+        bar,
+        baz,
+    };
     
     // Constructors
     constexpr IntNamedArray() = default;
@@ -77,10 +84,20 @@ class IntNamedArray {
         static_assert(I < 3, "Index out of bounds");
         return std::forward<Self>(self).data_[I];
     }
+    template <Field field, typename Self>
+    constexpr auto&& get(this Self&& self) {
+        constexpr std::size_t I{static_cast<std::size_t>(field)};
+        static_assert(I < 3, "Index out of bounds");
+        return std::forward<Self>(self).data_[I];
+    }
     // Runtime indexing
     template <typename Self>
     auto&& at(this Self&& self, std::size_t i) {
         return std::forward<Self>(self).data_.at(i);
+    }
+    template <typename Self>
+    auto&& at(this Self&& self, Field field) {
+        return std::forward<Self>(self).data_.at(static_cast<std::size_t>(field));
     }
 
     // Capacity

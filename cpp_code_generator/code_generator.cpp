@@ -27,6 +27,7 @@ auto CodeGenerator::generate() -> ErrorOr<void> {
         headers.insert("utility");
         headers.insert("array");
         headers.insert("cstddef");
+        headers.insert("cstdint");
         headers.insert("type_traits");
     }
     std::vector<std::string> sorted_headers;
@@ -79,6 +80,15 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
 )";
 
         if (n_indexes) {
+            auto indexes{std::span(na.fields()).subspan(header.field_index_start(), n_indexes)};
+
+            output_.file() += "\n    enum class Field : uint8_t {\n";
+            for (auto const index : indexes) {
+                auto field_name{mod_.tokens().lexeme(index.name())};
+                output_.file() += std::format("        {},\n", field_name);
+            }
+            output_.file() += "    };\n";
+
             output_.file() += std::format(R"(    
     // Constructors
     constexpr {0}() = default;
@@ -97,8 +107,6 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
                                           name,
                                           n_indexes,
                                           field_type_name);
-
-            auto indexes{std::span(na.fields()).subspan(header.field_index_start(), n_indexes)};
             auto array_idx{0};
 
             output_.file() += "\n    // Accessors\n";
@@ -117,13 +125,23 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
             output_.file() += std::format(R"(    // Compile time indexing
     template <std::size_t I, typename Self>
     constexpr auto&& get(this Self&& self) {{
-        static_assert(I < {}, "Index out of bounds");
+        static_assert(I < {0}, "Index out of bounds");
+        return std::forward<Self>(self).data_[I];
+    }}
+    template <Field field, typename Self>
+    constexpr auto&& get(this Self&& self) {{
+        constexpr std::size_t I{{static_cast<std::size_t>(field)}};
+        static_assert(I < {0}, "Index out of bounds");
         return std::forward<Self>(self).data_[I];
     }}
     // Runtime indexing
     template <typename Self>
     auto&& at(this Self&& self, std::size_t i) {{
         return std::forward<Self>(self).data_.at(i);
+    }}
+    template <typename Self>
+    auto&& at(this Self&& self, Field field) {{
+        return std::forward<Self>(self).data_.at(static_cast<std::size_t>(field));
     }}
 )",
                                           n_indexes);

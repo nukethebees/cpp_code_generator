@@ -11,6 +11,7 @@ struct PassTestFileInput {
     std::string_view test_name;
     std::string_view file_input;
     ccg::CompilerOutput expected_output;
+
     PassTestFileInput(std::string_view name_,
                       std::string_view input_,
                       ccg::CompilerOutput&& exp_out)

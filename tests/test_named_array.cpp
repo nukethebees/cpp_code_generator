@@ -152,6 +152,37 @@ TEST(named_array, algorithm_sort) {
     EXPECT_EQ(arr[2], 30);
 }
 
+// Tests for enum-based get() and at() methods (Field input)
+TEST(named_array, enum_get_intnamedarray) {
+    IntNamedArray arr{100, 200, 300};
+    EXPECT_EQ(arr.get<IntNamedArray::Field::foo>(), 100);
+    EXPECT_EQ(arr.get<IntNamedArray::Field::bar>(), 200);
+    EXPECT_EQ(arr.get<IntNamedArray::Field::baz>(), 300);
+}
+
+TEST(named_array, enum_at_intnamedarray) {
+    IntNamedArray arr{100, 200, 300};
+    EXPECT_EQ(arr.at(IntNamedArray::Field::foo), 100);
+    EXPECT_EQ(arr.at(IntNamedArray::Field::bar), 200);
+    EXPECT_EQ(arr.at(IntNamedArray::Field::baz), 300);
+    EXPECT_THROW(arr.at(static_cast<IntNamedArray::Field>(3)), std::out_of_range);
+}
+
+TEST(named_array, enum_get_tmpnamedarray) {
+    TmpNamedArray arr{Tmp<int>{1}, Tmp<int>{2}, Tmp<int>{3}};
+    EXPECT_EQ(arr.get<TmpNamedArray::Field::foo>().value, 1);
+    EXPECT_EQ(arr.get<TmpNamedArray::Field::bar>().value, 2);
+    EXPECT_EQ(arr.get<TmpNamedArray::Field::baz>().value, 3);
+}
+
+TEST(named_array, enum_at_tmpnamedarray) {
+    TmpNamedArray arr{Tmp<int>{1}, Tmp<int>{2}, Tmp<int>{3}};
+    EXPECT_EQ(arr.at(TmpNamedArray::Field::foo).value, 1);
+    EXPECT_EQ(arr.at(TmpNamedArray::Field::bar).value, 2);
+    EXPECT_EQ(arr.at(TmpNamedArray::Field::baz).value, 3);
+    EXPECT_THROW(arr.at(static_cast<TmpNamedArray::Field>(3)), std::out_of_range);
+}
+
 TEST(named_array, algorithm_find) {
     auto it = std::find(int_input.begin(), int_input.end(), 20);
     EXPECT_NE(it, int_input.end());
