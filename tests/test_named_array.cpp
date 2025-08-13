@@ -167,6 +167,14 @@ TEST(named_array, enum_at_intnamedarray) {
     EXPECT_EQ(arr.at(IntNamedArray::Field::baz), 300);
     EXPECT_THROW(arr.at(static_cast<IntNamedArray::Field>(3)), std::out_of_range);
 }
+TEST(named_array, enum_iter_intnamedarray) {
+    IntNamedArray arr{100, 200, 300};
+    int sum{0};
+    for (auto field : arr.get_fields()) {
+        sum += arr.at(field);
+    }
+    EXPECT_EQ(600, sum);
+}
 
 TEST(named_array, enum_get_tmpnamedarray) {
     TmpNamedArray arr{Tmp<int>{1}, Tmp<int>{2}, Tmp<int>{3}};

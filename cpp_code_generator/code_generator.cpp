@@ -89,6 +89,17 @@ auto CodeGenerator::named_arrays() -> ErrorOr<void> {
             }
             output_.file() += "    };\n";
 
+            output_.file() += std::format(R"(    constexpr auto get_fields() {{
+        return std::array<Field, {}>{{{{
+)",
+
+                                          n_indexes);
+            for (auto const index : indexes) {
+                auto field_name{mod_.tokens().lexeme(index.name())};
+                output_.file() += std::format("            Field::{},\n", field_name);
+            }
+            output_.file() += "        }};\n    }\n";
+
             output_.file() += std::format(R"(    
     // Constructors
     constexpr {0}() = default;

@@ -50,6 +50,13 @@ class IntNamedArray {
         bar,
         baz,
     };
+    constexpr auto get_fields() {
+        return std::array<Field, 3>{{
+            Field::foo,
+            Field::bar,
+            Field::baz,
+        }};
+    }
     
     // Constructors
     constexpr IntNamedArray() = default;
